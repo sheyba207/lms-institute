@@ -2,6 +2,7 @@
 import { Metadata } from "next";
 import { supabase } from "@/lib/supabaseClient";
 import { getLesson } from "@/data/courses";
+import { LessonProgressControls } from "@/components/lesson-progress-controls";
 
 type Props = {
   params: Promise<{ slug: string; lessonSlug: string }>;
@@ -20,6 +21,11 @@ type DBCourse = {
   slug: string;
   title: string;
   description: string | null;
+};
+
+type SimpleLesson = {
+  slug: string;
+  order_index: number | null;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -79,6 +85,16 @@ export default async function LessonPage({ params }: Props) {
     .eq("slug", slug)
     .maybeSingle<DBCourse>();
 
+  // Also fetch all lessons for next/last logic
+  const { data: allLessons } = (await supabase
+    .from("lessons")
+    .select("slug, order_index")
+    .eq("course_slug", slug)
+    .order("order_index", { ascending: true })) as {
+    data: SimpleLesson[] | null;
+    error: any;
+  };
+
   if (!dbLesson || !dbCourse) {
     // Fallback to TS data
     const fallback = getLesson(slug, lessonSlug);
@@ -96,6 +112,11 @@ export default async function LessonPage({ params }: Props) {
     }
 
     const { course, lesson, lessonIndex } = fallback;
+
+    const isLastLesson = lessonIndex + 1 >= course.lessons.length;
+    const nextLessonSlug = !isLastLesson
+      ? course.lessons[lessonIndex + 1].slug
+      : undefined;
 
     return (
       <div className="space-y-8">
@@ -131,11 +152,31 @@ export default async function LessonPage({ params }: Props) {
             assignments as needed.
           </p>
         </section>
+
+        <LessonProgressControls
+          courseSlug={course.slug}
+          lessonSlug={lesson.slug}
+          isLastLesson={isLastLesson}
+          nextLessonSlug={nextLessonSlug}
+        />
       </div>
     );
   }
 
-  // Use DB data
+  // Compute isLastLesson / nextLessonSlug from DB
+  let isLastLesson = false;
+  let nextLessonSlug: string | undefined = undefined;
+
+  if (allLessons && allLessons.length > 0) {
+    const idx = allLessons.findIndex((l) => l.slug === dbLesson.slug);
+    if (idx >= 0) {
+      isLastLesson = idx === allLessons.length - 1;
+      if (!isLastLesson && allLessons[idx + 1]) {
+        nextLessonSlug = allLessons[idx + 1].slug;
+      }
+    }
+  }
+
   const lessonIndex = dbLesson.order_index ?? 0;
 
   return (
@@ -175,6 +216,13 @@ export default async function LessonPage({ params }: Props) {
           assignments as needed.
         </p>
       </section>
+
+      <LessonProgressControls
+        courseSlug={dbCourse.slug}
+        lessonSlug={dbLesson.slug}
+        isLastLesson={isLastLesson}
+        nextLessonSlug={nextLessonSlug}
+      />
     </div>
   );
 }
