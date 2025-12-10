@@ -1,7 +1,8 @@
 // app/courses/page.tsx
 import { Metadata } from "next";
 import Link from "next/link";
-import { courses } from "@/data/courses";
+import { supabase } from "@/lib/supabaseClient";
+import { courses as fallbackCourses } from "@/data/courses";
 
 export const metadata: Metadata = {
   title: "Courses | LearnSphere Institute",
@@ -9,7 +10,50 @@ export const metadata: Metadata = {
     "Browse practical, career-focused courses in programming, analytics, lab skills, and automation.",
 };
 
-export default function CoursesPage() {
+type DBCourse = {
+  slug: string;
+  title: string;
+  description: string | null;
+  duration: string | null;
+  level: string | null;
+};
+
+export default async function CoursesPage() {
+  let dbCourses: DBCourse[] | null = null;
+
+  const { data, error } = await supabase
+    .from("courses")
+    .select("slug, title, description, duration, level")
+    .order("title", { ascending: true });
+
+  if (!error && data) {
+    dbCourses = data;
+  }
+
+  // Use DB if available, otherwise fallback to local TS data
+  const coursesToShow: {
+    slug: string;
+    title: string;
+    description: string;
+    duration?: string;
+    level?: string;
+  }[] =
+    dbCourses && dbCourses.length > 0
+      ? dbCourses.map((c) => ({
+          slug: c.slug,
+          title: c.title,
+          description: c.description || "",
+          duration: c.duration || undefined,
+          level: c.level || undefined,
+        }))
+      : fallbackCourses.map((c) => ({
+          slug: c.slug,
+          title: c.title,
+          description: c.description,
+          duration: c.duration,
+          level: c.level,
+        }));
+
   return (
     <div className="space-y-6">
       <header className="space-y-2">
@@ -22,7 +66,7 @@ export default function CoursesPage() {
       </header>
 
       <div className="grid gap-4 md:grid-cols-3">
-        {courses.map((course) => (
+        {coursesToShow.map((course) => (
           <Link
             key={course.slug}
             href={`/courses/${course.slug}`}

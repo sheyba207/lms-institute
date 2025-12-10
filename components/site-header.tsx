@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
+import { supabase } from "@/lib/supabaseClient";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -12,6 +13,7 @@ const navItems = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
+const { data, error } = await supabase.from("courses").select("*");
 
 export function SiteHeader() {
   const pathname = usePathname();
