@@ -1,11 +1,17 @@
 // app/dashboard/DashboardClient.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import { courses, Course } from "@/data/courses";
 import Link from "next/link";
 import { useAuth } from "@/components/auth-provider";
+import { supabase } from "@/lib/supabaseClient";
 
-const enrolledState: {
+// Simple demo student key (later we map it to real user)
+const DEMO_STUDENT_KEY = "demo-student";
+
+// Fallback static enrollment if DB is empty/unavailable
+const fallbackEnrolledState: {
   slug: string;
   lastLessonSlug?: string;
 }[] = [
@@ -19,29 +25,76 @@ const enrolledState: {
   },
 ];
 
+type EnrollmentRow = {
+  course_slug: string;
+  last_lesson_slug: string | null;
+};
+
 function getProgress(course: Course, lastLessonSlug?: string) {
   const total = course.lessons.length;
   if (total === 0) return { progress: 0, nextLesson: undefined };
 
   if (!lastLessonSlug) {
+    // Not started
     return { progress: 0, nextLesson: course.lessons[0] };
   }
 
   const idx = course.lessons.findIndex((l) => l.slug === lastLessonSlug);
   if (idx === -1) {
+    // Unknown slug – treat as not started
     return { progress: 0, nextLesson: course.lessons[0] };
   }
 
   const completedCount = idx + 1;
   const progress = completedCount / total;
+
   const nextLesson =
-    completedCount < total ? course.lessons[completedCount] : course.lessons[idx];
+    completedCount < total
+      ? course.lessons[completedCount]
+      : course.lessons[idx];
 
   return { progress, nextLesson };
 }
 
 export function DashboardClient() {
   const { user } = useAuth();
+
+  const [enrolledState, setEnrolledState] = useState<
+    { slug: string; lastLessonSlug?: string }[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadEnrollments() {
+      try {
+        const { data, error } = await supabase
+          .from("student_enrollments")
+          .select("course_slug, last_lesson_slug")
+          .eq("student_key", DEMO_STUDENT_KEY);
+
+        if (error) {
+          console.warn("Error loading enrollments, using fallback:", error);
+          setEnrolledState(fallbackEnrolledState);
+        } else if (!data || data.length === 0) {
+          // No records yet – use fallback so UI still looks alive
+          setEnrolledState(fallbackEnrolledState);
+        } else {
+          const mapped = (data as EnrollmentRow[]).map((row) => ({
+            slug: row.course_slug,
+            lastLessonSlug: row.last_lesson_slug ?? undefined,
+          }));
+          setEnrolledState(mapped);
+        }
+      } catch (e) {
+        console.warn("Unexpected enrollment load error, using fallback:", e);
+        setEnrolledState(fallbackEnrolledState);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadEnrollments();
+  }, []);
 
   if (!user) {
     return (
@@ -51,8 +104,7 @@ export function DashboardClient() {
         </h1>
         <p className="text-sm text-slate-400 max-w-xl">
           You need to be logged in to view your enrolled courses and progress.
-          Use the{" "}
-          <span className="text-emerald-300">Log in</span> or{" "}
+          Use the <span className="text-emerald-300">Log in</span> or{" "}
           <span className="text-emerald-300">Start free</span> button in the
           top-right corner.
         </p>
@@ -81,7 +133,9 @@ export function DashboardClient() {
           Enrolled courses
         </h2>
 
-        {enrolledCourses.length === 0 ? (
+        {loading ? (
+          <p className="text-sm text-slate-400">Loading your courses...</p>
+        ) : enrolledCourses.length === 0 ? (
           <p className="text-sm text-slate-400">
             You&apos;re not enrolled in any courses yet.
           </p>
