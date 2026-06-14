@@ -4,30 +4,21 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
-import { supabase } from "@/lib/supabaseClient";
 
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/courses", label: "Courses" },
-  { href: "/dashboard", label: "Dashboard" },
+  { href: "/webinars", label: "Live Sessions" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
-const { data, error } = await supabase.from("courses").select("*");
 
 export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, login, logout } = useAuth();
 
-  const handleStartFree = () => {
-    // Fake login, then go to dashboard
-    login({ name: "Student" });
-    router.push("/dashboard");
-  };
-
   const handleLogin = () => {
-    // For now, same as Start free
     login({ name: "Student" });
     router.push("/dashboard");
   };
@@ -38,18 +29,62 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="w-full border-b border-slate-800 bg-slate-950/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        {/* Logo / Brand */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-xl bg-emerald-400/90 shadow-lg shadow-emerald-500/40" />
-          <span className="text-lg font-semibold tracking-tight">
-            LearnSphere Institute
-          </span>
+    <header
+      style={{
+        background: "#1a1a2e",
+        borderBottom: "2px solid #c9a84c",
+      }}
+      className="w-full sticky top-0 z-50"
+    >
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div
+            style={{
+              width: 38,
+              height: 38,
+              background: "linear-gradient(135deg, #c9a84c 0%, #e8cc7a 100%)",
+              borderRadius: 6,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: "Georgia, serif",
+              fontWeight: "bold",
+              fontSize: 18,
+              color: "#1a1a2e",
+              flexShrink: 0,
+            }}
+          >
+            Dr
+          </div>
+          <div>
+            <div
+              style={{
+                fontFamily: "Georgia, serif",
+                fontWeight: 700,
+                fontSize: 15,
+                color: "#faf8f2",
+                lineHeight: 1.1,
+              }}
+            >
+              Dr. Sarah Al-Amin
+            </div>
+            <div
+              style={{
+                fontSize: 10,
+                color: "#c9a84c",
+                fontFamily: "system-ui, sans-serif",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+              }}
+            >
+              English Language & Linguistics
+            </div>
+          </div>
         </Link>
 
         {/* Nav */}
-        <nav className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => {
             const active =
               item.href === "/"
@@ -60,9 +95,17 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`transition-colors ${
-                  active ? "text-white" : "hover:text-white"
-                }`}
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: 13,
+                  padding: "6px 14px",
+                  borderRadius: 4,
+                  color: active ? "#c9a84c" : "#c8c8e0",
+                  borderBottom: active ? "2px solid #c9a84c" : "2px solid transparent",
+                  transition: "color 0.15s ease",
+                  textDecoration: "none",
+                }}
+                className="hover:text-amber-300"
               >
                 {item.label}
               </Link>
@@ -70,16 +113,34 @@ export function SiteHeader() {
           })}
         </nav>
 
-        {/* Auth CTAs */}
-        <div className="flex items-center gap-3 text-sm">
+        {/* Auth */}
+        <div className="flex items-center gap-3">
           {user ? (
             <>
-              <span className="hidden text-slate-300 md:inline">
-                Hi, {user.name}
-              </span>
+              <Link
+                href="/dashboard"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: 13,
+                  color: "#c8c8e0",
+                  textDecoration: "none",
+                }}
+                className="hidden md:inline hover:text-amber-300"
+              >
+                My Learning
+              </Link>
               <button
                 onClick={handleLogout}
-                className="rounded-full px-4 py-2 text-sm text-slate-200 hover:bg-slate-900/80"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: 13,
+                  color: "#c8c8e0",
+                  background: "transparent",
+                  border: "1px solid #4a4a6a",
+                  padding: "5px 14px",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                }}
               >
                 Log out
               </button>
@@ -88,16 +149,34 @@ export function SiteHeader() {
             <>
               <button
                 onClick={handleLogin}
-                className="rounded-full px-4 py-2 text-sm text-slate-200 hover:bg-slate-900/80"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: 13,
+                  color: "#c8c8e0",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "5px 10px",
+                }}
               >
                 Log in
               </button>
-              <button
-                onClick={handleStartFree}
-                className="rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-emerald-400"
+              <Link
+                href="/courses"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  background: "linear-gradient(135deg, #c9a84c 0%, #e8cc7a 100%)",
+                  color: "#1a1a2e",
+                  padding: "7px 18px",
+                  borderRadius: 4,
+                  textDecoration: "none",
+                  display: "inline-block",
+                }}
               >
-                Start free
-              </button>
+                Explore Courses
+              </Link>
             </>
           )}
         </div>

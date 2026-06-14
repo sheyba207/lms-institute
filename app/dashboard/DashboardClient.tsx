@@ -1,217 +1,662 @@
 // app/dashboard/DashboardClient.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { courses, Course } from "@/data/courses";
+import { courses } from "@/data/courses";
 import Link from "next/link";
 import { useAuth } from "@/components/auth-provider";
-import { supabase } from "@/lib/supabaseClient";
 
-// Simple demo student key (later we map it to real user)
-const DEMO_STUDENT_KEY = "demo-student";
-
-// Fallback static enrollment if DB is empty/unavailable
-const fallbackEnrolledState: {
-  slug: string;
-  lastLessonSlug?: string;
-}[] = [
-  {
-    slug: "python-for-data-automation",
-    lastLessonSlug: "working-with-data-files",
-  },
-  {
-    slug: "advanced-excel-for-lab-qc",
-    lastLessonSlug: "lab-excel-basics",
-  },
+const DEMO_ENROLLED = [
+  { slug: "academic-writing-mastery", completedLessons: 3 },
+  { slug: "ielts-toefl-preparation", completedLessons: 1 },
 ];
 
-type EnrollmentRow = {
-  course_slug: string;
-  last_lesson_slug: string | null;
+const lessonTypeIcon: Record<string, string> = {
+  video: "▶",
+  live: "🔴",
+  webinar: "🎙",
+  reading: "📄",
+  assignment: "✍",
 };
 
-function getProgress(course: Course, lastLessonSlug?: string) {
-  const total = course.lessons.length;
-  if (total === 0) return { progress: 0, nextLesson: undefined };
-
-  if (!lastLessonSlug) {
-    // Not started
-    return { progress: 0, nextLesson: course.lessons[0] };
-  }
-
-  const idx = course.lessons.findIndex((l) => l.slug === lastLessonSlug);
-  if (idx === -1) {
-    // Unknown slug – treat as not started
-    return { progress: 0, nextLesson: course.lessons[0] };
-  }
-
-  const completedCount = idx + 1;
-  const progress = completedCount / total;
-
-  const nextLesson =
-    completedCount < total
-      ? course.lessons[completedCount]
-      : course.lessons[idx];
-
-  return { progress, nextLesson };
-}
+const upcomingEvents = [
+  {
+    title: "Academic Writing Workshop: Crafting Powerful Introductions",
+    type: "Live Zoom",
+    date: "Thu, 19 June",
+    time: "7:00 PM PKT",
+    color: "#8a2d2d",
+    bg: "#fff0f0",
+  },
+  {
+    title: "IELTS Task 2 Writing: The 5 Essay Types Explained",
+    type: "Webinar",
+    date: "Sat, 21 June",
+    time: "5:00 PM PKT",
+    color: "#5a2d8a",
+    bg: "#f4f0ff",
+  },
+];
 
 export function DashboardClient() {
   const { user } = useAuth();
 
-  const [enrolledState, setEnrolledState] = useState<
-    { slug: string; lastLessonSlug?: string }[]
-  >([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadEnrollments() {
-      try {
-        const { data, error } = await supabase
-          .from("student_enrollments")
-          .select("course_slug, last_lesson_slug")
-          .eq("student_key", DEMO_STUDENT_KEY);
-
-        if (error) {
-          console.warn("Error loading enrollments, using fallback:", error);
-          setEnrolledState(fallbackEnrolledState);
-        } else if (!data || data.length === 0) {
-          // No records yet – use fallback so UI still looks alive
-          setEnrolledState(fallbackEnrolledState);
-        } else {
-          const mapped = (data as EnrollmentRow[]).map((row) => ({
-            slug: row.course_slug,
-            lastLessonSlug: row.last_lesson_slug ?? undefined,
-          }));
-          setEnrolledState(mapped);
-        }
-      } catch (e) {
-        console.warn("Unexpected enrollment load error, using fallback:", e);
-        setEnrolledState(fallbackEnrolledState);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadEnrollments();
-  }, []);
-
   if (!user) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold text-slate-50">
-          Please log in to access your dashboard
+      <div
+        style={{
+          maxWidth: 560,
+          margin: "80px auto",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "Georgia, serif",
+            fontSize: 28,
+            fontWeight: 700,
+            color: "#1a1a2e",
+            margin: "0 auto 24px",
+          }}
+        >
+          🎓
+        </div>
+        <h1
+          style={{
+            fontFamily: "Georgia, serif",
+            fontSize: 28,
+            fontWeight: 700,
+            color: "#1a1a2e",
+            marginBottom: 12,
+          }}
+        >
+          Please Log In
         </h1>
-        <p className="text-sm text-slate-400 max-w-xl">
-          You need to be logged in to view your enrolled courses and progress.
-          Use the <span className="text-emerald-300">Log in</span> or{" "}
-          <span className="text-emerald-300">Start free</span> button in the
-          top-right corner.
+        <p
+          style={{
+            fontFamily: "system-ui, sans-serif",
+            fontSize: 15,
+            color: "#7878a0",
+            lineHeight: 1.7,
+            marginBottom: 28,
+          }}
+        >
+          Your personal learning dashboard — with course progress, live session
+          links, and uploaded resources — is waiting for you.
         </p>
+        <Link
+          href="/courses"
+          style={{
+            fontFamily: "system-ui, sans-serif",
+            fontWeight: 700,
+            fontSize: 14,
+            background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
+            color: "#1a1a2e",
+            padding: "12px 28px",
+            borderRadius: 6,
+            textDecoration: "none",
+            display: "inline-block",
+          }}
+        >
+          Browse Courses & Enrol
+        </Link>
       </div>
     );
   }
 
   const enrolledCourses = courses.filter((c) =>
-    enrolledState.some((e) => e.slug === c.slug)
+    DEMO_ENROLLED.some((e) => e.slug === c.slug)
   );
 
   return (
-    <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-semibold text-slate-50">
-          Your dashboard
-        </h1>
-        <p className="text-sm text-slate-400 max-w-2xl">
-          Welcome back, {user.name}. Continue where you left off and jump into
-          your next lesson.
-        </p>
-      </header>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-slate-200">
-          Enrolled courses
-        </h2>
-
-        {loading ? (
-          <p className="text-sm text-slate-400">Loading your courses...</p>
-        ) : enrolledCourses.length === 0 ? (
-          <p className="text-sm text-slate-400">
-            You&apos;re not enrolled in any courses yet.
+    <div>
+      {/* Header */}
+      <div
+        style={{
+          background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
+          borderRadius: 14,
+          padding: "28px 36px",
+          marginBottom: 40,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontFamily: "system-ui, sans-serif",
+              fontSize: 12,
+              color: "#c9a84c",
+              marginBottom: 6,
+              letterSpacing: "0.08em",
+            }}
+          >
+            Welcome back
+          </div>
+          <h1
+            style={{
+              fontFamily: "Georgia, serif",
+              fontSize: 26,
+              fontWeight: 700,
+              color: "#faf8f2",
+              marginBottom: 4,
+            }}
+          >
+            {user.name}
+          </h1>
+          <p
+            style={{
+              fontFamily: "system-ui, sans-serif",
+              fontSize: 13,
+              color: "#9898b8",
+            }}
+          >
+            {enrolledCourses.length} courses enrolled · 2 upcoming live sessions
           </p>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+        </div>
+        <Link
+          href="/courses"
+          style={{
+            fontFamily: "system-ui, sans-serif",
+            fontWeight: 600,
+            fontSize: 13,
+            background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
+            color: "#1a1a2e",
+            padding: "10px 20px",
+            borderRadius: 6,
+            textDecoration: "none",
+          }}
+        >
+          + Enrol in More Courses
+        </Link>
+      </div>
+
+      <div className="grid gap-10 md:grid-cols-[3fr,2fr]">
+        {/* Left column */}
+        <div>
+          {/* Enrolled courses */}
+          <h2
+            style={{
+              fontFamily: "Georgia, serif",
+              fontSize: 20,
+              fontWeight: 700,
+              color: "#1a1a2e",
+              marginBottom: 18,
+              paddingBottom: 10,
+              borderBottom: "2px solid #c9a84c",
+              display: "inline-block",
+            }}
+          >
+            My Courses
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 44 }}>
             {enrolledCourses.map((course) => {
-              const state = enrolledState.find((e) => e.slug === course.slug);
-              const { progress, nextLesson } = getProgress(
-                course,
-                state?.lastLessonSlug
-              );
-              const percent = Math.round(progress * 100);
+              const demo = DEMO_ENROLLED.find((e) => e.slug === course.slug)!;
+              const total = course.lessons.length;
+              const completed = demo.completedLessons;
+              const pct = Math.round((completed / total) * 100);
+              const nextLesson = course.lessons[completed];
 
               return (
                 <div
                   key={course.slug}
-                  className="group rounded-2xl border border-slate-800 bg-slate-900/70 p-4 transition-transform hover:-translate-y-1 hover:border-emerald-400/60"
+                  style={{
+                    background: "#fff",
+                    border: "1px solid #e8e4d8",
+                    borderRadius: 12,
+                    padding: "22px 24px",
+                  }}
                 >
-                  <div className="flex items-center justify-between gap-3">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: 12,
+                      flexWrap: "wrap",
+                      gap: 10,
+                    }}
+                  >
                     <div>
-                      <h3 className="text-sm font-semibold text-slate-50 group-hover:text-emerald-300">
+                      <h3
+                        style={{
+                          fontFamily: "Georgia, serif",
+                          fontSize: 17,
+                          fontWeight: 700,
+                          color: "#1a1a2e",
+                          marginBottom: 4,
+                        }}
+                      >
                         {course.title}
                       </h3>
-                      <p className="mt-1 text-xs text-slate-400 line-clamp-2">
-                        {course.description}
+                      <p
+                        style={{
+                          fontFamily: "system-ui, sans-serif",
+                          fontSize: 12,
+                          color: "#9898b8",
+                        }}
+                      >
+                        {completed} of {total} lessons complete
                       </p>
                     </div>
-                    <span className="rounded-full bg-slate-800 px-2 py-1 text-[10px] text-slate-300">
+                    <span
+                      style={{
+                        fontFamily: "system-ui, sans-serif",
+                        fontSize: 11,
+                        background: "#f5f2ea",
+                        color: "#6060808",
+                        padding: "4px 12px",
+                        borderRadius: 100,
+                      }}
+                    >
                       {course.level}
                     </span>
                   </div>
 
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center justify-between text-[11px] text-slate-400">
-                      <span>Progress</span>
-                      <span>{percent}%</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
+                  {/* Progress bar */}
+                  <div style={{ marginBottom: 16 }}>
+                    <div
+                      style={{
+                        height: 6,
+                        background: "#f0ece0",
+                        borderRadius: 3,
+                        overflow: "hidden",
+                      }}
+                    >
                       <div
-                        className="h-full rounded-full bg-emerald-400"
-                        style={{ width: `${percent}%` }}
+                        className="progress-fill"
+                        style={{
+                          height: "100%",
+                          width: `${pct}%`,
+                          background: "linear-gradient(90deg, #c9a84c, #e8cc7a)",
+                          borderRadius: 3,
+                        }}
                       />
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        fontFamily: "system-ui, sans-serif",
+                        fontSize: 11,
+                        color: "#9898b8",
+                        marginTop: 5,
+                      }}
+                    >
+                      <span>{pct}% complete</span>
+                      <span>{total - completed} lessons remaining</span>
                     </div>
                   </div>
 
-                  {nextLesson && (
-                    <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400">
-                      <div className="flex flex-col">
-                        <span className="text-slate-500">Next lesson</span>
-                        <span className="text-slate-200">
-                          {nextLesson.title}
+                  {/* Lesson list (compact) */}
+                  <div
+                    style={{
+                      border: "1px solid #f0ece0",
+                      borderRadius: 8,
+                      overflow: "hidden",
+                      marginBottom: 14,
+                    }}
+                  >
+                    {course.lessons.slice(0, 4).map((lesson, i) => (
+                      <div
+                        key={lesson.slug}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                          padding: "10px 14px",
+                          borderBottom: i < Math.min(3, course.lessons.length - 1) ? "1px solid #f8f4ec" : "none",
+                          background: i < completed ? "#fafefa" : "#fff",
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: 20,
+                            height: 20,
+                            borderRadius: "50%",
+                            border: "1.5px solid",
+                            borderColor: i < completed ? "#4a7c59" : "#d8d4c8",
+                            background: i < completed ? "#4a7c59" : "transparent",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: 10,
+                            color: "#fff",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {i < completed ? "✓" : ""}
                         </span>
+                        <span
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            fontSize: 12,
+                            color: i < completed ? "#7878a0" : "#1a1a2e",
+                            flex: 1,
+                            textDecoration: i < completed ? "line-through" : "none",
+                          }}
+                        >
+                          {lesson.title}
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            fontSize: 11,
+                            color: "#c9a84c",
+                          }}
+                        >
+                          {lessonTypeIcon[lesson.type]}
+                        </span>
+                      </div>
+                    ))}
+                    {course.lessons.length > 4 && (
+                      <div
+                        style={{
+                          padding: "8px 14px",
+                          fontFamily: "system-ui, sans-serif",
+                          fontSize: 11,
+                          color: "#9898b8",
+                          textAlign: "center",
+                          background: "#faf8f2",
+                        }}
+                      >
+                        + {course.lessons.length - 4} more lessons
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Continue CTA */}
+                  {nextLesson ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: 10,
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            fontSize: 11,
+                            color: "#9898b8",
+                            marginBottom: 2,
+                          }}
+                        >
+                          Up next:
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            fontSize: 13,
+                            color: "#3d3d5c",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {nextLesson.title}
+                        </div>
                       </div>
                       <Link
                         href={`/courses/${course.slug}/lesson/${nextLesson.slug}`}
-                        className="rounded-full bg-emerald-500 px-3 py-1.5 text-[11px] font-medium text-slate-950 hover:bg-emerald-400"
+                        style={{
+                          fontFamily: "system-ui, sans-serif",
+                          fontWeight: 700,
+                          fontSize: 13,
+                          background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
+                          color: "#e8cc7a",
+                          padding: "9px 18px",
+                          borderRadius: 6,
+                          textDecoration: "none",
+                          whiteSpace: "nowrap",
+                        }}
                       >
-                        Continue
+                        Continue →
                       </Link>
                     </div>
-                  )}
-
-                  <div className="mt-3 text-[11px]">
-                    <Link
-                      href={`/courses/${course.slug}`}
-                      className="text-slate-400 hover:text-emerald-300"
+                  ) : (
+                    <div
+                      style={{
+                        fontFamily: "system-ui, sans-serif",
+                        fontSize: 13,
+                        color: "#4a7c59",
+                        fontWeight: 600,
+                      }}
                     >
-                      View course overview →
-                    </Link>
-                  </div>
+                      ✓ Course Complete!
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
-        )}
-      </section>
+
+          {/* Resources / Files section */}
+          <h2
+            style={{
+              fontFamily: "Georgia, serif",
+              fontSize: 20,
+              fontWeight: 700,
+              color: "#1a1a2e",
+              marginBottom: 18,
+              paddingBottom: 10,
+              borderBottom: "2px solid #c9a84c",
+              display: "inline-block",
+            }}
+          >
+            Course Materials & Files
+          </h2>
+          <div
+            style={{
+              background: "#fff",
+              border: "1px solid #e8e4d8",
+              borderRadius: 12,
+              padding: "20px 24px",
+            }}
+          >
+            {[
+              { name: "Academic Writing — Week 1 Handout.pdf", size: "1.2 MB", course: "Academic Writing Mastery" },
+              { name: "Thesis Statement Checklist.pdf", size: "340 KB", course: "Academic Writing Mastery" },
+              { name: "IELTS Task 2 — Model Answers Pack.pdf", size: "2.8 MB", course: "IELTS & TOEFL Prep" },
+              { name: "Zoom Recording — Writing Workshop June 7.mp4", size: "Available in course", course: "Academic Writing Mastery" },
+            ].map((file, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "12px 0",
+                  borderBottom: i < 3 ? "1px solid #f5f2ea" : "none",
+                  flexWrap: "wrap",
+                  gap: 10,
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ fontSize: 18 }}>
+                    {file.name.endsWith(".mp4") ? "🎬" : "📄"}
+                  </span>
+                  <div>
+                    <div
+                      style={{
+                        fontFamily: "system-ui, sans-serif",
+                        fontSize: 13,
+                        color: "#1a1a2e",
+                        marginBottom: 2,
+                      }}
+                    >
+                      {file.name}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "system-ui, sans-serif",
+                        fontSize: 11,
+                        color: "#9898b8",
+                      }}
+                    >
+                      {file.course} · {file.size}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  style={{
+                    fontFamily: "system-ui, sans-serif",
+                    fontSize: 12,
+                    color: "#c9a84c",
+                    background: "transparent",
+                    border: "1px solid #c9a84c",
+                    padding: "5px 14px",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Download
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right sidebar */}
+        <div>
+          {/* Upcoming sessions */}
+          <div
+            style={{
+              background: "#fff",
+              border: "1px solid #e8e4d8",
+              borderRadius: 12,
+              padding: "22px 24px",
+              marginBottom: 20,
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: 17,
+                fontWeight: 700,
+                color: "#1a1a2e",
+                marginBottom: 18,
+              }}
+            >
+              Upcoming Live Sessions
+            </h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {upcomingEvents.map((ev, i) => (
+                <div
+                  key={i}
+                  style={{
+                    borderLeft: `3px solid ${ev.color}`,
+                    paddingLeft: 14,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "system-ui, sans-serif",
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color: ev.color,
+                      letterSpacing: "0.08em",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {ev.type.toUpperCase()}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "Georgia, serif",
+                      fontSize: 14,
+                      color: "#1a1a2e",
+                      lineHeight: 1.3,
+                      marginBottom: 5,
+                    }}
+                  >
+                    {ev.title}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "system-ui, sans-serif",
+                      fontSize: 11,
+                      color: "#9898b8",
+                    }}
+                  >
+                    {ev.date} · {ev.time}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/webinars"
+              style={{
+                display: "block",
+                textAlign: "center",
+                marginTop: 18,
+                fontFamily: "system-ui, sans-serif",
+                fontSize: 12,
+                color: "#c9a84c",
+                textDecoration: "none",
+                fontWeight: 600,
+              }}
+            >
+              View Full Schedule →
+            </Link>
+          </div>
+
+          {/* Quick links */}
+          <div
+            style={{
+              background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
+              borderRadius: 12,
+              padding: "22px 24px",
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: 16,
+                fontWeight: 700,
+                color: "#faf8f2",
+                marginBottom: 16,
+              }}
+            >
+              Quick Access
+            </h3>
+            {[
+              { label: "📚 All Courses", href: "/courses" },
+              { label: "🔴 Webinar Schedule", href: "/webinars" },
+              { label: "📬 Message Dr. Al-Amin", href: "/contact" },
+              { label: "🎓 About the Professor", href: "/about" },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                style={{
+                  display: "block",
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: 13,
+                  color: "#c8c8e0",
+                  textDecoration: "none",
+                  padding: "9px 0",
+                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                }}
+                className="hover:text-amber-300 transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

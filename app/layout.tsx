@@ -2,27 +2,55 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { AuthProvider } from "@/components/auth-provider";
 
 export const metadata: Metadata = {
-  title: "LearnSphere Institute",
+  title: "Dr. Sarah Al-Amin | English Language & Linguistics",
   description:
-    "Career-focused learning with live classes, projects, and certificates in programming, analytics, and lab skills.",
+    "PhD in Applied Linguistics. University professor, researcher, and educator. Online courses in academic writing, IELTS/TOEFL preparation, linguistics, and professional English communication.",
+  keywords: [
+    "English language courses",
+    "academic writing",
+    "IELTS preparation",
+    "TOEFL preparation",
+    "applied linguistics",
+    "PhD professor",
+    "ESL courses",
+    "online English classes",
+    "language learning",
+  ],
+  openGraph: {
+    title: "Dr. Sarah Al-Amin — English Language & Linguistics",
+    description:
+      "Expert-led English language and linguistics courses from a PhD professor. Live sessions, webinars, video lectures, and personalised feedback.",
+    siteName: "Dr. Sarah Al-Amin",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 const BASE_URL = "https://your-domain.com";
 
-function JsonLdOrganization() {
+function JsonLdPerson() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    name: "LearnSphere Institute",
-    url: BASE_URL,
+    "@type": "Person",
+    name: "Dr. Sarah Al-Amin",
+    jobTitle: "Assistant Professor of English Language & Linguistics",
     description:
-      "Career-focused online institute offering practical courses in programming, analytics, lab chemistry, and automation.",
+      "PhD in Applied Linguistics. Educator, researcher, and online course instructor.",
+    url: BASE_URL,
     sameAs: [
-      "https://www.linkedin.com/",
-      "https://www.youtube.com/",
+      "https://linkedin.com/",
+      "https://scholar.google.com/",
+      "https://researchgate.net/",
+    ],
+    knowsAbout: [
+      "Applied Linguistics",
+      "Academic Writing",
+      "English as a Second Language",
+      "Discourse Analysis",
     ],
   };
 
@@ -41,13 +69,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-950 text-slate-50 antialiased">
+      <body className="min-h-screen" style={{ background: "#faf8f2", color: "#3d3d5c" }}>
         <AuthProvider>
           <SiteHeader />
-          <main className="mx-auto max-w-6xl px-4 pb-24 pt-12">
+          <main className="mx-auto max-w-6xl px-4 pb-24 pt-10">
             {children}
           </main>
-          <JsonLdOrganization />
+          <SiteFooter />
+          <JsonLdPerson />
         </AuthProvider>
       </body>
     </html>

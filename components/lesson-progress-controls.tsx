@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/components/auth-provider";
 
 type LessonProgressControlsProps = {
@@ -12,8 +11,6 @@ type LessonProgressControlsProps = {
   isLastLesson: boolean;
   nextLessonSlug?: string;
 };
-
-const DEMO_STUDENT_KEY = "demo-student";
 
 export function LessonProgressControls({
   courseSlug,
@@ -24,62 +21,84 @@ export function LessonProgressControls({
   const { user } = useAuth();
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [done, setDone] = useState(false);
 
-  async function handleMarkComplete() {
-    // If not logged in, just send to dashboard/login flow
+  function handleMarkComplete() {
     if (!user) {
       router.push("/dashboard");
       return;
     }
-
     setSaving(true);
-    try {
-      const { error } = await supabase.from("student_enrollments").upsert(
-        {
-          student_key: DEMO_STUDENT_KEY,
-          course_slug: courseSlug,
-          last_lesson_slug: lessonSlug,
-        },
-        {
-          onConflict: "student_key,course_slug",
-        } as any
-      );
-
-      if (error) {
-        console.error("Error updating progress:", error);
-      }
-
-      if (isLastLesson || !nextLessonSlug) {
-        router.push("/dashboard");
-      } else {
-        router.push(`/courses/${courseSlug}/lesson/${nextLessonSlug}`);
-      }
-    } catch (e) {
-      console.error("Unexpected progress update error:", e);
-    } finally {
+    setTimeout(() => {
       setSaving(false);
-    }
+      setDone(true);
+      setTimeout(() => {
+        if (isLastLesson || !nextLessonSlug) {
+          router.push("/dashboard");
+        } else {
+          router.push(`/courses/${courseSlug}/lesson/${nextLessonSlug}`);
+        }
+      }, 600);
+    }, 500);
   }
 
   return (
-    <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div
+      style={{
+        marginTop: 32,
+        padding: "20px 24px",
+        background: "#fff",
+        border: "1px solid #e8e4d8",
+        borderRadius: 10,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 14,
+      }}
+    >
       <button
-        onClick={handleMarkComplete}
-        disabled={saving}
-        className="rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-emerald-400 disabled:opacity-60"
+        onClick={() => router.push(`/courses/${courseSlug}`)}
+        style={{
+          fontFamily: "system-ui, sans-serif",
+          fontSize: 13,
+          color: "#9898b8",
+          background: "transparent",
+          border: "1px solid #d8d4c8",
+          padding: "9px 18px",
+          borderRadius: 6,
+          cursor: "pointer",
+        }}
       >
-        {saving
-          ? "Saving..."
-          : isLastLesson
-          ? "Mark complete & finish"
-          : "Mark complete & next lesson"}
+        ← Back to Course
       </button>
 
       <button
-        onClick={() => router.push(`/courses/${courseSlug}`)}
-        className="text-slate-400 hover:text-emerald-300"
+        onClick={handleMarkComplete}
+        disabled={saving || done}
+        style={{
+          fontFamily: "system-ui, sans-serif",
+          fontWeight: 700,
+          fontSize: 14,
+          background: done
+            ? "linear-gradient(135deg, #4a7c59, #5a9c69)"
+            : "linear-gradient(135deg, #c9a84c, #e8cc7a)",
+          color: done ? "#fff" : "#1a1a2e",
+          padding: "10px 24px",
+          borderRadius: 6,
+          border: "none",
+          cursor: saving || done ? "default" : "pointer",
+          opacity: saving ? 0.7 : 1,
+          transition: "all 0.3s ease",
+        }}
       >
-        Back to course overview
+        {done
+          ? "✓ Marked Complete!"
+          : saving
+          ? "Saving..."
+          : isLastLesson
+          ? "Mark Complete & Finish Course"
+          : "Mark Complete & Next Lesson →"}
       </button>
     </div>
   );
