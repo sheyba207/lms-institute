@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { AdminClient } from "./AdminClient";
 
 export const metadata: Metadata = {
-  title: "Admin · Courses | LearnSphere Institute",
+  title: "Admin · Courses | Dr. Sheema Ali Gohar",
   description:
     "Internal admin view for managing courses, lessons, and instructors.",
 };

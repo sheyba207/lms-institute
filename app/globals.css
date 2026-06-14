@@ -1,162 +1,273 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
 
-/* ─── AKU-inspired design tokens ─────────────────────────────
-   White background · Burgundy accent · Sharp rectangles
-   Serif headings · Compact sans-serif UI · Hairline rules
-   All-caps labels · No gradients · No border-radius decorations
+/* ─── Design System ───────────────────────────────────────────
+   Dr. Sheema Ali Gohar — English Language & Linguistics
+   
+   Palette: Deep Navy (Oxford-inspired) + Warm White + Slate accents
+   Typography: Playfair Display (headings) · Source Sans 3 (body/UI)
+   Feel: Refined, scholarly, trustworthy — elite university standard
 ──────────────────────────────────────────────────────────── */
 
 :root {
-  --white:      #ffffff;
-  --off-white:  #f7f6f4;
-  --light-grey: #ebebeb;
-  --mid-grey:   #cccccc;
-  --text-dark:  #1a1a1a;
-  --text-body:  #333333;
-  --text-muted: #666666;
-  --text-light: #999999;
-  --burgundy:   #6b1a1a;    /* primary accent — AKU-style maroon */
-  --burgundy-dk:#4e1010;    /* darker on hover */
-  --burgundy-lt:#8c2020;    /* slightly lighter variant */
-  --rule:       #d0cdc8;    /* hairline rule colour */
-  --nav-bg:     #ffffff;
-  --nav-top:    #222222;    /* top utility bar */
+  /* Core palette */
+  --navy:       #1B2A4A;   /* Oxford navy — primary brand */
+  --navy-deep:  #111C33;   /* darker navy for hero/footer */
+  --navy-mid:   #2C3E6B;   /* medium navy */
+  --navy-light: #3D5A9A;   /* lighter navy for hover states */
+  --gold:       #C8A96E;   /* warm academic gold — secondary accent */
+  --gold-light: #E8D5A8;   /* pale gold for backgrounds */
+  
+  /* Neutrals */
+  --white:      #FFFFFF;
+  --off-white:  #F8F7F4;   /* warm page background */
+  --cream:      #F2EFE8;   /* card backgrounds */
+  --light:      #ECEAE4;   /* light borders */
+  --rule:       #D8D4CC;   /* hairline rules */
+  --mid:        #A8A49C;   /* muted text */
+  --dark:       #1A1A1A;   /* near-black */
+  
+  /* Text */
+  --text-heading: #0F1C35;
+  --text-body:    #2D3142;
+  --text-muted:   #5C5C6E;
+  --text-light:   #8C8C9E;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
+html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
-  background: var(--white);
+  background: var(--off-white);
   color: var(--text-body);
-  font-family: -apple-system, 'Segoe UI', Arial, Helvetica, sans-serif;
+  font-family: 'Source Sans 3', -apple-system, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  line-height: 1.6;
 }
 
-/* Serif for headings — editorial weight */
-h1, h2, h3, h4 {
-  font-family: 'Times New Roman', Times, Georgia, serif;
-  color: var(--text-dark);
-  font-weight: normal;
-  line-height: 1.2;
+/* ── Typography ──────────────────────────────────────────── */
+h1, h2, h3 {
+  font-family: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  color: var(--text-heading);
+  font-weight: 600;
+  line-height: 1.15;
 }
-
-p { line-height: 1.7; }
-
-a {
-  color: var(--burgundy);
-  text-decoration: none;
+h4, h5, h6 {
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text-heading);
+  font-weight: 600;
+  line-height: 1.3;
 }
-a:hover { color: var(--burgundy-dk); text-decoration: underline; }
+p { line-height: 1.75; color: var(--text-body); }
 
-/* ─── Section label — AKU style ─────────────────────────── */
-.section-label {
-  font-family: -apple-system, Arial, sans-serif;
+a { color: var(--navy); text-decoration: none; }
+a:hover { color: var(--navy-light); text-decoration: underline; }
+
+/* ── Section label ───────────────────────────────────────── */
+.label {
+  font-family: 'Source Sans 3', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 12px;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 10px;
 }
 
-/* ─── Hairline rule ──────────────────────────────────────── */
-.rule {
+/* ── Divider / rule ──────────────────────────────────────── */
+.section-rule {
   border: none;
   border-top: 1px solid var(--rule);
 }
+.section-head {
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-heading);
+}
 
-/* ─── Burgundy CTA button (AKU-style: sharp, no radius) ─── */
-.btn-primary {
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
   display: inline-block;
-  font-family: -apple-system, Arial, sans-serif;
+  font-family: 'Source Sans 3', sans-serif;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #fff;
-  background: var(--burgundy);
-  padding: 10px 22px;
+  padding: 11px 28px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.18s ease;
   border: none;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.15s ease;
+  line-height: 1;
 }
-.btn-primary:hover { background: var(--burgundy-dk); color: #fff; text-decoration: none; }
+.btn-navy {
+  background: var(--navy);
+  color: #fff;
+}
+.btn-navy:hover { background: var(--navy-deep); color: #fff; text-decoration: none; }
 
-.btn-outline {
-  display: inline-block;
-  font-family: -apple-system, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--burgundy);
+.btn-outline-navy {
   background: transparent;
-  padding: 9px 22px;
-  border: 1.5px solid var(--burgundy);
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.15s ease;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
 }
-.btn-outline:hover { background: var(--burgundy); color: #fff; text-decoration: none; }
+.btn-outline-navy:hover { background: var(--navy); color: #fff; text-decoration: none; }
 
-/* ─── News date block ────────────────────────────────────── */
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy-deep);
+}
+.btn-gold:hover { background: var(--gold-light); color: var(--navy-deep); text-decoration: none; }
+
+.btn-white {
+  background: #fff;
+  color: var(--navy);
+}
+.btn-white:hover { background: var(--gold-light); color: var(--navy-deep); text-decoration: none; }
+
+.btn-outline-white {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.55);
+}
+.btn-outline-white:hover { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; }
+
+/* ── Date block (news/events) ────────────────────────────── */
 .date-block {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  min-height: 52px;
-  background: var(--burgundy);
+  width: 52px;
+  min-height: 58px;
+  background: var(--navy);
   color: #fff;
   flex-shrink: 0;
 }
 .date-block .day {
-  font-family: 'Times New Roman', serif;
-  font-size: 22px;
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 600;
   line-height: 1;
 }
 .date-block .month {
-  font-family: -apple-system, Arial, sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 3px;
+  color: var(--gold-light);
 }
 
-/* ─── Card link hover ────────────────────────────────────── */
-.card-link {
+/* ── Card / list row hover ───────────────────────────────── */
+.row-link {
   border-bottom: 1px solid var(--rule);
-  transition: background 0.12s ease;
+  transition: background 0.12s ease, padding-left 0.15s ease;
+  cursor: pointer;
 }
-.card-link:hover { background: var(--off-white); }
+.row-link:hover { background: var(--cream); padding-left: 4px; }
 
-/* ─── Progress bar ───────────────────────────────────────── */
-.progress-fill { transition: width 0.5s ease; }
+/* ── Sidebar panel ───────────────────────────────────────── */
+.panel {
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  background: var(--white);
+}
+.panel-head {
+  background: var(--navy);
+  padding: 12px 20px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+}
+.panel-head.gold { background: var(--gold); color: var(--navy-deep); }
+.panel-body { padding: 0 20px; }
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--light);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13.5px;
+}
+.panel-row:last-child { border-bottom: none; }
+.panel-row .label-col { color: var(--text-muted); }
+.panel-row .val-col { color: var(--text-heading); font-weight: 600; }
 
-/* ─── Focus ──────────────────────────────────────────────── */
-:focus-visible {
-  outline: 2px solid var(--burgundy);
-  outline-offset: 2px;
+/* ── Course card ─────────────────────────────────────────── */
+.course-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+.course-card:hover {
+  box-shadow: 0 8px 32px rgba(27,42,74,0.12);
+  transform: translateY(-2px);
 }
 
-/* ─── Utility ────────────────────────────────────────────── */
-.text-burgundy { color: var(--burgundy); }
-.uppercase-label {
+/* ── Progress bar ────────────────────────────────────────── */
+.progress-track {
+  height: 5px;
+  background: var(--light);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--navy);
+  transition: width 0.5s ease;
+}
+
+/* ── Focus ───────────────────────────────────────────────── */
+:focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
+
+/* ── Form inputs ─────────────────────────────────────────── */
+.field {
+  width: 100%;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  border: 1px solid var(--rule);
+  padding: 11px 14px;
+  color: var(--text-heading);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.field:focus { border-color: var(--navy); }
+
+.field-label {
+  display: block;
+  font-family: 'Source Sans 3', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-family: -apple-system, Arial, sans-serif;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+}
+
+/* ── Misc ────────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
 }
