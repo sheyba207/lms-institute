@@ -1,6 +1,7 @@
 // app/webinars/page.tsx
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Live Sessions & Webinars | Dr. Sarah Al-Amin",
@@ -24,20 +25,24 @@ export default function WebinarsPage() {
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
 
-      {/* Title bar */}
-      <div style={{ borderBottom: "1px solid #d0cdc8", padding: "32px 0 20px", marginBottom: 40 }}>
-        <div className="uppercase-label" style={{ color: "#6b1a1a", marginBottom: 8 }}>Interactive Learning</div>
-        <h1 style={{
-          fontFamily: "'Times New Roman', serif",
-          fontSize: "clamp(28px, 4vw, 44px)", fontWeight: "normal", color: "#1a1a1a",
-        }}>Live Sessions &amp; Webinars</h1>
-        <p style={{
-          fontFamily: "Arial, sans-serif", fontSize: 14, color: "#666",
-          marginTop: 8, maxWidth: 600,
-        }}>
-          Real-time learning with Dr. Al-Amin. Zoom classes for enrolled students,
-          open webinars for everyone, and recorded sessions available on demand.
-        </p>
+      {/* Photo banner */}
+      <div style={{ position: "relative", height: 240, background: "#1a1a1a", overflow: "hidden", marginBottom: 40 }}>
+        <Image
+          src="https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=1400&h=400&fit=crop"
+          alt="Students in a collaborative learning session"
+          fill
+          priority
+          style={{ objectFit: "cover", objectPosition: "center 40%", opacity: 0.4 }}
+          sizes="100vw"
+        />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(107,26,26,0.85) 0%, rgba(0,0,0,0.3) 100%)" }} />
+        <div style={{ position: "absolute", bottom: 0, left: 0, padding: "24px 32px" }}>
+          <div className="uppercase-label" style={{ color: "#ffbbbb", marginBottom: 8 }}>Interactive Learning</div>
+          <h1 style={{ fontFamily: "'Times New Roman', serif", fontSize: "clamp(26px, 4vw, 44px)", fontWeight: "normal", color: "#fff" }}>Live Sessions &amp; Webinars</h1>
+          <p style={{ fontFamily: "Arial, sans-serif", fontSize: 14, color: "#ddd", marginTop: 6, maxWidth: 520 }}>
+            Zoom classes for enrolled students, open webinars for everyone, and recorded sessions on demand.
+          </p>
+        </div>
       </div>
 
       {/* Legend */}
