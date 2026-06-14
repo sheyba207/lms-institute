@@ -46,7 +46,7 @@ export function SiteHeader() {
                 <button onClick={handleLogout} style={{
                   fontSize: 11, color: "#ccc", padding: "0 14px", lineHeight: "36px",
                   borderLeft: "1px solid #444", background: "none", border: "none",
-                  borderLeft: "1px solid #444", cursor: "pointer",
+                  cursor: "pointer",
                 }}>Log Out</button>
               </>
             ) : (
