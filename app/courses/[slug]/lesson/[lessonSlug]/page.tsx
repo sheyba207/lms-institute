@@ -4,443 +4,215 @@ import { getLesson } from "@/data/courses";
 import { LessonProgressControls } from "@/components/lesson-progress-controls";
 import Link from "next/link";
 
-type Props = {
-  params: Promise<{ slug: string; lessonSlug: string }>;
-};
+type Props = { params: Promise<{ slug: string; lessonSlug: string }> };
 
-const lessonTypeIcon: Record<string, string> = {
-  video: "▶",
-  live: "🔴",
-  webinar: "🎙",
-  reading: "📄",
-  assignment: "✍",
-};
-
-const lessonTypeLabel: Record<string, string> = {
-  video: "Video Lesson",
-  live: "Live Zoom Session",
-  webinar: "Expert Webinar",
-  reading: "Reading Material",
-  assignment: "Graded Assignment",
-};
-
-const lessonTypeColor: Record<string, { bg: string; text: string; border: string }> = {
-  video: { bg: "#f0f4ff", text: "#2d5a8a", border: "#c0d0e8" },
-  live: { bg: "#fff0f0", text: "#8a2d2d", border: "#e8c0c0" },
-  webinar: { bg: "#f4f0ff", text: "#5a2d8a", border: "#d0c0e8" },
-  reading: { bg: "#f0f8f0", text: "#2d6a3a", border: "#c0dcc4" },
-  assignment: { bg: "#fff8e8", text: "#8a6a1a", border: "#e8d8a0" },
-};
+const lessonTypeIcon: Record<string, string> = { video:"▶", live:"⬤", webinar:"🎙", reading:"◼", assignment:"✍" };
+const lessonTypeLabel: Record<string, string> = { video:"Video Lesson", live:"Live Zoom Session", webinar:"Expert Webinar", reading:"Reading", assignment:"Graded Assignment" };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, lessonSlug } = await params;
-  const fallback = getLesson(slug, lessonSlug);
-  if (fallback) {
-    return {
-      title: `${fallback.lesson.title} | ${fallback.course.title} — Dr. Sarah Al-Amin`,
-      description: fallback.course.description,
-    };
-  }
-  return { title: "Lesson Not Found | Dr. Sarah Al-Amin" };
+  const r = getLesson(slug, lessonSlug);
+  return r
+    ? { title: `${r.lesson.title} | ${r.course.title} — Dr. Sarah Al-Amin`, description: r.course.description }
+    : { title: "Lesson Not Found | Dr. Sarah Al-Amin" };
 }
 
 export default async function LessonPage({ params }: Props) {
   const { slug, lessonSlug } = await params;
-  const fallback = getLesson(slug, lessonSlug);
+  const result = getLesson(slug, lessonSlug);
 
-  if (!fallback) {
+  if (!result) {
     return (
-      <div style={{ textAlign: "center", padding: "80px 0" }}>
-        <h2
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 24,
-            fontWeight: 700,
-            color: "#1a1a2e",
-            marginBottom: 10,
-          }}
-        >
-          Lesson Not Found
-        </h2>
-        <p
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 14,
-            color: "#7878a0",
-            marginBottom: 24,
-          }}
-        >
-          This lesson doesn't seem to exist. Return to the course.
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 24px", textAlign: "center" }}>
+        <h2 style={{ fontFamily: "'Times New Roman', serif", fontSize: 28, fontWeight: "normal" }}>Lesson Not Found</h2>
+        <p style={{ fontFamily: "Arial, sans-serif", color: "#666", marginTop: 12, marginBottom: 24 }}>
+          This lesson doesn't exist. Return to the course.
         </p>
-        <Link
-          href={`/courses/${slug}`}
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontWeight: 700,
-            fontSize: 14,
-            background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
-            color: "#1a1a2e",
-            padding: "11px 24px",
-            borderRadius: 6,
-            textDecoration: "none",
-          }}
-        >
-          Back to Course
-        </Link>
+        <Link href={`/courses/${slug}`} className="btn-primary">Back to Course</Link>
       </div>
     );
   }
 
-  const { course, lesson, lessonIndex } = fallback;
+  const { course, lesson, lessonIndex } = result;
   const isLastLesson = lessonIndex + 1 >= course.lessons.length;
   const nextLessonSlug = !isLastLesson ? course.lessons[lessonIndex + 1].slug : undefined;
-  const typeStyle = lessonTypeColor[lesson.type] || lessonTypeColor.video;
 
   return (
-    <div className="grid gap-8 md:grid-cols-[3fr,1fr]">
-      {/* Main content */}
-      <div>
-        {/* Breadcrumb */}
-        <div
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 12,
-            color: "#9898b8",
-            marginBottom: 18,
-          }}
-        >
-          <Link href="/courses" style={{ color: "#c9a84c", textDecoration: "none" }}>
-            Courses
-          </Link>
-          {" › "}
-          <Link href={`/courses/${course.slug}`} style={{ color: "#c9a84c", textDecoration: "none" }}>
-            {course.title}
-          </Link>
-          {" › "}
-          <span style={{ color: "#3d3d5c" }}>Lesson {String(lessonIndex + 1).padStart(2, "0")}</span>
-        </div>
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
 
-        {/* Lesson type badge + number */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginBottom: 14,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 11,
-              fontWeight: 700,
-              background: typeStyle.bg,
-              color: typeStyle.text,
-              border: `1px solid ${typeStyle.border}`,
-              padding: "3px 12px",
-              borderRadius: 4,
-            }}
-          >
-            {lessonTypeIcon[lesson.type]} {lessonTypeLabel[lesson.type] || lesson.type}
-          </span>
-          {lesson.isFreePreview && (
-            <span
-              style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                background: "#f0f8f0",
-                color: "#4a7c59",
-                border: "1px solid #c0dcc4",
-                padding: "3px 12px",
-                borderRadius: 4,
-              }}
-            >
-              ✓ Free Preview
-            </span>
-          )}
-        </div>
-
-        <h1
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: "clamp(22px, 3.5vw, 32px)",
-            fontWeight: 700,
-            color: "#1a1a2e",
-            lineHeight: 1.2,
-            marginBottom: 8,
-          }}
-        >
-          {lesson.title}
-        </h1>
-        <p
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 13,
-            color: "#9898b8",
-            marginBottom: 28,
-          }}
-        >
-          {lesson.duration} · {course.title}
-        </p>
-
-        {/* Video player placeholder */}
-        <div
-          style={{
-            aspectRatio: "16/9",
-            background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
-            borderRadius: 12,
-            border: "1px solid #2d2d4e",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 32,
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Decorative pattern */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "radial-gradient(circle at 30% 50%, rgba(201,168,76,0.08) 0%, transparent 60%)",
-            }}
-          />
-          <div
-            style={{
-              width: 72,
-              height: 72,
-              borderRadius: "50%",
-              background: "rgba(201,168,76,0.15)",
-              border: "2px solid rgba(201,168,76,0.4)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 28,
-              marginBottom: 16,
-              cursor: "pointer",
-            }}
-          >
-            {lesson.type === "live" || lesson.type === "webinar" ? "🔴" : "▶"}
-          </div>
-          <div
-            style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 16,
-              color: "#e8e4d8",
-              textAlign: "center",
-              maxWidth: 360,
-              lineHeight: 1.5,
-              position: "relative",
-            }}
-          >
-            {lesson.type === "live" || lesson.type === "webinar"
-              ? "Live session link will appear here when class begins"
-              : "Video content will be embedded here when uploaded by Dr. Al-Amin"}
-          </div>
-          <div
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 12,
-              color: "#7878a0",
-              marginTop: 10,
-              position: "relative",
-            }}
-          >
-            {lesson.duration}
-          </div>
-        </div>
-
-        {/* Lesson notes area */}
-        <div
-          style={{
-            background: "#fff",
-            border: "1px solid #e8e4d8",
-            borderRadius: 12,
-            padding: "28px 32px",
-            marginBottom: 28,
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 18,
-              fontWeight: 700,
-              color: "#1a1a2e",
-              marginBottom: 14,
-            }}
-          >
-            Lesson Notes & Resources
-          </h2>
-          <p
-            style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 15,
-              color: "#4d4d6c",
-              lineHeight: 1.85,
-              marginBottom: 16,
-            }}
-          >
-            Lecture notes, supplementary readings, and downloadable materials for this lesson
-            will appear in this section once Dr. Al-Amin uploads them. Check your email for
-            session reminders and Zoom links if this is a live session.
-          </p>
-          <div
-            style={{
-              background: "#faf8f2",
-              border: "1px solid #e8e4d8",
-              borderRadius: 8,
-              padding: "14px 18px",
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 13,
-              color: "#7878a0",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            <span style={{ fontSize: 18 }}>📁</span>
-            <span>
-              Downloadable files and slides will be available here.{" "}
-              <Link href="/contact" style={{ color: "#c9a84c", textDecoration: "none", fontWeight: 600 }}>
-                Contact Dr. Al-Amin
-              </Link>{" "}
-              if you need access to materials.
-            </span>
-          </div>
-        </div>
-
-        {/* Navigation controls */}
-        <LessonProgressControls
-          courseSlug={course.slug}
-          lessonSlug={lesson.slug}
-          isLastLesson={isLastLesson}
-          nextLessonSlug={nextLessonSlug}
-        />
+      {/* Breadcrumb */}
+      <div style={{
+        fontFamily: "Arial, sans-serif", fontSize: 12, color: "#999",
+        padding: "16px 0", borderBottom: "1px solid #ebebeb",
+      }}>
+        <Link href="/courses" style={{ color: "#6b1a1a", textDecoration: "none" }}>Courses</Link>
+        {" / "}
+        <Link href={`/courses/${course.slug}`} style={{ color: "#6b1a1a", textDecoration: "none" }}>{course.title}</Link>
+        {" / "}<span>Lesson {String(lessonIndex + 1).padStart(2, "0")}</span>
       </div>
 
-      {/* Sidebar — lesson list */}
-      <div>
-        <div
-          style={{
-            background: "#fff",
-            border: "1px solid #e8e4d8",
-            borderRadius: 12,
-            overflow: "hidden",
-            position: "sticky",
-            top: 80,
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
-              padding: "16px 18px",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "#c9a84c",
-                marginBottom: 4,
-              }}
-            >
-              Course Lessons
+      <div style={{
+        display: "grid", gap: "0 48px", paddingTop: 32,
+      }} className="grid-cols-1 md:grid-cols-[3fr,1fr]">
+
+        {/* Main */}
+        <div>
+          {/* Lesson header */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
+              <span style={{
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                textTransform: "uppercase", color: lesson.type === "live" || lesson.type === "webinar" ? "#6b1a1a" : "#555",
+                border: `1px solid ${lesson.type === "live" || lesson.type === "webinar" ? "#6b1a1a" : "#ccc"}`,
+                padding: "3px 10px", fontFamily: "Arial, sans-serif",
+              }}>
+                {lessonTypeIcon[lesson.type]} {lessonTypeLabel[lesson.type] || lesson.type}
+              </span>
+              {lesson.isFreePreview && (
+                <span style={{
+                  fontSize: 10, fontWeight: 700, letterSpacing: "0.1em",
+                  textTransform: "uppercase", color: "#4a6a2a",
+                  border: "1px solid #4a6a2a", padding: "3px 10px",
+                  fontFamily: "Arial, sans-serif",
+                }}>Free Preview</span>
+              )}
+              <span style={{ fontFamily: "Arial, sans-serif", fontSize: 12, color: "#999" }}>
+                {lesson.duration}
+              </span>
             </div>
-            <div
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 14,
-                color: "#e8e4d8",
-                lineHeight: 1.3,
-              }}
-            >
+
+            <h1 style={{
+              fontFamily: "'Times New Roman', serif",
+              fontSize: "clamp(22px, 3.5vw, 34px)", fontWeight: "normal",
+              color: "#1a1a1a", lineHeight: 1.2, marginBottom: 6,
+            }}>{lesson.title}</h1>
+            <p style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: "#999" }}>
               {course.title}
+            </p>
+          </div>
+
+          {/* Video player */}
+          <div style={{
+            aspectRatio: "16/9", background: "#111", marginBottom: 28,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            border: "1px solid #333", position: "relative",
+          }}>
+            <div style={{
+              width: 64, height: 64, border: "2px solid rgba(255,255,255,0.3)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              marginBottom: 16,
+            }}>
+              <span style={{ fontSize: 24, color: "rgba(255,255,255,0.7)" }}>
+                {lesson.type === "live" || lesson.type === "webinar" ? "⬤" : "▶"}
+              </span>
+            </div>
+            <div style={{
+              fontFamily: "'Times New Roman', serif",
+              fontSize: 16, color: "rgba(255,255,255,0.6)", textAlign: "center",
+              maxWidth: 360, lineHeight: 1.5,
+            }}>
+              {lesson.type === "live" || lesson.type === "webinar"
+                ? "Live session link will appear here when the class begins"
+                : "Video content will be available once uploaded by Dr. Al-Amin"}
+            </div>
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              padding: "12px 20px", background: "rgba(0,0,0,0.6)",
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <span style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: "#ccc" }}>{lesson.title}</span>
+              <span style={{ fontFamily: "Arial, sans-serif", fontSize: 12, color: "#999" }}>{lesson.duration}</span>
             </div>
           </div>
 
-          <div>
-            {course.lessons.map((l, i) => {
-              const isCurrent = l.slug === lesson.slug;
-              return (
-                <Link
-                  key={l.slug}
-                  href={`/courses/${course.slug}/lesson/${l.slug}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      padding: "11px 16px",
-                      borderBottom: "1px solid #f5f2ea",
-                      background: isCurrent ? "#faf4e8" : "transparent",
-                      borderLeft: isCurrent ? "3px solid #c9a84c" : "3px solid transparent",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: "Georgia, serif",
-                        fontSize: 11,
-                        color: isCurrent ? "#c9a84c" : "#c0bca8",
-                        fontWeight: 700,
-                        minWidth: 20,
-                        textAlign: "right",
-                      }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <div
-                        style={{
-                          fontFamily: "system-ui, sans-serif",
-                          fontSize: 12,
-                          color: isCurrent ? "#1a1a2e" : "#4d4d6c",
-                          fontWeight: isCurrent ? 600 : 400,
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {l.title}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "system-ui, sans-serif",
-                          fontSize: 10,
-                          color: "#9898b8",
-                          marginTop: 2,
-                        }}
-                      >
-                        {l.duration}
+          {/* Lesson notes */}
+          <div style={{
+            border: "1px solid #d0cdc8", padding: "28px 32px", marginBottom: 28,
+          }}>
+            <div style={{ borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 18 }}>
+              <span className="uppercase-label" style={{ color: "#1a1a1a" }}>Lesson Notes &amp; Resources</span>
+            </div>
+            <p style={{
+              fontFamily: "Arial, sans-serif", fontSize: 14, color: "#555", lineHeight: 1.8, marginBottom: 16,
+            }}>
+              Lecture notes, handouts, and supplementary reading materials for this lesson
+              will be available here once uploaded. Live session students will receive Zoom
+              links by email before the class begins.
+            </p>
+            <div style={{
+              background: "#f7f6f4", border: "1px solid #d0cdc8",
+              padding: "14px 18px", display: "flex", alignItems: "center", gap: 12,
+              fontFamily: "Arial, sans-serif", fontSize: 13, color: "#666",
+            }}>
+              <span style={{ flexShrink: 0 }}>📁</span>
+              <span>
+                Files and slides will appear here. For materials access contact{" "}
+                <Link href="/contact" style={{ color: "#6b1a1a" }}>Dr. Al-Amin</Link>.
+              </span>
+            </div>
+          </div>
+
+          <LessonProgressControls
+            courseSlug={course.slug}
+            lessonSlug={lesson.slug}
+            isLastLesson={isLastLesson}
+            nextLessonSlug={nextLessonSlug}
+          />
+        </div>
+
+        {/* Sidebar — lesson list */}
+        <div>
+          <div style={{
+            border: "1px solid #d0cdc8",
+            position: "sticky", top: 80,
+          }}>
+            <div style={{ background: "#1a1a1a", padding: "14px 18px" }}>
+              <div className="uppercase-label" style={{ color: "#aaa", marginBottom: 2 }}>Course Content</div>
+              <div style={{ fontFamily: "'Times New Roman', serif", fontSize: 14, color: "#fff" }}>
+                {course.title}
+              </div>
+            </div>
+            <div>
+              {course.lessons.map((l, i) => {
+                const isCurrent = l.slug === lesson.slug;
+                return (
+                  <Link key={l.slug} href={`/courses/${course.slug}/lesson/${l.slug}`}
+                    style={{ textDecoration: "none" }}>
+                    <div style={{
+                      display: "flex", gap: 12, padding: "12px 16px",
+                      borderBottom: "1px solid #ebebeb",
+                      background: isCurrent ? "#fff7f7" : "#fff",
+                      borderLeft: isCurrent ? "3px solid #6b1a1a" : "3px solid transparent",
+                    }}>
+                      <span style={{
+                        fontFamily: "'Times New Roman', serif", fontSize: 12,
+                        color: isCurrent ? "#6b1a1a" : "#ccc",
+                        minWidth: 20, flexShrink: 0, marginTop: 1,
+                      }}>{String(i + 1).padStart(2, "0")}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{
+                          fontFamily: "Arial, sans-serif", fontSize: 12,
+                          color: isCurrent ? "#6b1a1a" : "#333",
+                          fontWeight: isCurrent ? 700 : 400, lineHeight: 1.35,
+                        }}>{l.title}</div>
+                        <div style={{
+                          fontFamily: "Arial, sans-serif", fontSize: 10,
+                          color: "#999", marginTop: 2,
+                        }}>{lessonTypeIcon[l.type]} {l.duration}</div>
                       </div>
                     </div>
-                    <span style={{ fontSize: 12, flexShrink: 0 }}>
-                      {lessonTypeIcon[l.type] || "•"}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          <div style={{ padding: "14px 16px", borderTop: "1px solid #f0ece0" }}>
-            <Link
-              href={`/courses/${course.slug}`}
-              style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 12,
-                color: "#c9a84c",
-                textDecoration: "none",
-                fontWeight: 600,
-              }}
-            >
-              ← Course Overview
-            </Link>
+                  </Link>
+                );
+              })}
+            </div>
+            <div style={{ padding: "14px 16px", borderTop: "1px solid #ebebeb" }}>
+              <Link href={`/courses/${course.slug}`} style={{
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                textTransform: "uppercase", color: "#6b1a1a", textDecoration: "none",
+                fontFamily: "Arial, sans-serif",
+              }}>← Course Overview</Link>
+            </div>
           </div>
         </div>
       </div>

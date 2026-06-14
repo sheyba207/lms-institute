@@ -1,98 +1,162 @@
 @import "tailwindcss";
 
+/* ─── AKU-inspired design tokens ─────────────────────────────
+   White background · Burgundy accent · Sharp rectangles
+   Serif headings · Compact sans-serif UI · Hairline rules
+   All-caps labels · No gradients · No border-radius decorations
+──────────────────────────────────────────────────────────── */
+
 :root {
-  --ink: #1a1a2e;
-  --ink-soft: #2d2d4e;
-  --gold: #c9a84c;
-  --gold-light: #e8cc7a;
-  --gold-dim: #8a6e2f;
-  --ivory: #faf8f2;
-  --ivory-warm: #f2ede0;
-  --sage: #4a7c59;
-  --text-body: #3d3d5c;
-  --text-muted: #8080a0;
+  --white:      #ffffff;
+  --off-white:  #f7f6f4;
+  --light-grey: #ebebeb;
+  --mid-grey:   #cccccc;
+  --text-dark:  #1a1a1a;
+  --text-body:  #333333;
+  --text-muted: #666666;
+  --text-light: #999999;
+  --burgundy:   #6b1a1a;    /* primary accent — AKU-style maroon */
+  --burgundy-dk:#4e1010;    /* darker on hover */
+  --burgundy-lt:#8c2020;    /* slightly lighter variant */
+  --rule:       #d0cdc8;    /* hairline rule colour */
+  --nav-bg:     #ffffff;
+  --nav-top:    #222222;    /* top utility bar */
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
-  background: var(--ivory);
+  background: var(--white);
   color: var(--text-body);
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: -apple-system, 'Segoe UI', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Georgia', serif;
-  color: var(--ink);
+/* Serif for headings — editorial weight */
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Times, Georgia, serif;
+  color: var(--text-dark);
+  font-weight: normal;
   line-height: 1.2;
 }
 
-p, li {
-  line-height: 1.75;
+p { line-height: 1.7; }
+
+a {
+  color: var(--burgundy);
+  text-decoration: none;
+}
+a:hover { color: var(--burgundy-dk); text-decoration: underline; }
+
+/* ─── Section label — AKU style ─────────────────────────── */
+.section-label {
+  font-family: -apple-system, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
 }
 
-/* Serif brand feel */
-.font-display {
-  font-family: 'Georgia', 'Palatino Linotype', serif;
+/* ─── Hairline rule ──────────────────────────────────────── */
+.rule {
+  border: none;
+  border-top: 1px solid var(--rule);
 }
 
-.font-sans-ui {
-  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-}
-
-/* Gold underline accent */
-.accent-underline {
-  position: relative;
+/* ─── Burgundy CTA button (AKU-style: sharp, no radius) ─── */
+.btn-primary {
   display: inline-block;
+  font-family: -apple-system, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--burgundy);
+  padding: 10px 22px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease;
 }
-.accent-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--gold);
+.btn-primary:hover { background: var(--burgundy-dk); color: #fff; text-decoration: none; }
+
+.btn-outline {
+  display: inline-block;
+  font-family: -apple-system, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  background: transparent;
+  padding: 9px 22px;
+  border: 1.5px solid var(--burgundy);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.btn-outline:hover { background: var(--burgundy); color: #fff; text-decoration: none; }
+
+/* ─── News date block ────────────────────────────────────── */
+.date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  min-height: 52px;
+  background: var(--burgundy);
+  color: #fff;
+  flex-shrink: 0;
+}
+.date-block .day {
+  font-family: 'Times New Roman', serif;
+  font-size: 22px;
+  line-height: 1;
+}
+.date-block .month {
+  font-family: -apple-system, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
 }
 
-/* Card hover */
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+/* ─── Card link hover ────────────────────────────────────── */
+.card-link {
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.12s ease;
 }
-.card-hover:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(26, 26, 46, 0.10);
-  border-color: var(--gold) !important;
-}
+.card-link:hover { background: var(--off-white); }
 
-/* Progress bar */
-.progress-fill {
-  transition: width 0.5s ease;
-}
+/* ─── Progress bar ───────────────────────────────────────── */
+.progress-fill { transition: width 0.5s ease; }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--ivory-warm);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--gold-dim);
-  border-radius: 3px;
-}
-
-/* Focus */
+/* ─── Focus ──────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
+  outline: 2px solid var(--burgundy);
+  outline-offset: 2px;
+}
+
+/* ─── Utility ────────────────────────────────────────────── */
+.text-burgundy { color: var(--burgundy); }
+.uppercase-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: -apple-system, Arial, sans-serif;
 }

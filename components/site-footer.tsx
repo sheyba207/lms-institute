@@ -3,139 +3,113 @@ import Link from "next/link";
 
 export function SiteFooter() {
   return (
-    <footer
-      style={{
-        background: "#1a1a2e",
-        borderTop: "2px solid #c9a84c",
-        color: "#9898b8",
-        fontFamily: "system-ui, sans-serif",
-        fontSize: 13,
-      }}
-    >
-      <div className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-10 md:grid-cols-4">
+    <footer style={{ borderTop: "3px solid #6b1a1a", background: "#1a1a1a", color: "#ccc" }}>
+      {/* Main footer */}
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 24px 40px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px 48px" }}>
+
           {/* Brand */}
-          <div className="md:col-span-2">
-            <div
-              style={{
-                fontFamily: "Georgia, serif",
-                fontWeight: 700,
-                fontSize: 18,
-                color: "#faf8f2",
-                marginBottom: 6,
-              }}
-            >
-              Dr. Sarah Al-Amin
-            </div>
-            <div
-              style={{
-                fontSize: 11,
-                color: "#c9a84c",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                marginBottom: 14,
-              }}
-            >
-              PhD · Applied Linguistics · English Language
-            </div>
-            <p style={{ lineHeight: 1.7, maxWidth: 340 }}>
-              Teaching the language of thought, research, and human connection —
-              one course at a time. Reach out to collaborate, enrol, or simply learn more.
+          <div style={{ gridColumn: "span 2" }} className="md:col-span-2">
+            <div style={{
+              fontFamily: "'Times New Roman', serif", fontSize: 20,
+              color: "#fff", marginBottom: 8,
+            }}>Dr. Sarah Al-Amin</div>
+            <div style={{
+              fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+              color: "#aaa", marginBottom: 16,
+            }}>PhD · English Language &amp; Applied Linguistics</div>
+            <p style={{ fontSize: 13, color: "#999", lineHeight: 1.7, maxWidth: 340 }}>
+              Educating and inspiring students through language — online courses,
+              live sessions, and research in applied linguistics.
             </p>
           </div>
 
-          {/* Links */}
+          {/* Platform */}
           <div>
-            <div
-              style={{
-                color: "#c9a84c",
-                fontWeight: 600,
-                fontSize: 11,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginBottom: 14,
-              }}
-            >
-              Platform
-            </div>
-            <div className="space-y-2">
-              {[
-                { href: "/courses", label: "All Courses" },
-                { href: "/webinars", label: "Live Sessions & Webinars" },
-                { href: "/dashboard", label: "Student Dashboard" },
-                { href: "/about", label: "About Dr. Al-Amin" },
-              ].map((item) => (
-                <div key={item.href}>
-                  <Link
-                    href={item.href}
-                    style={{ color: "#9898b8", textDecoration: "none" }}
-                    className="hover:text-amber-300 transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </div>
-              ))}
-            </div>
+            <div style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: "0.14em",
+              textTransform: "uppercase", color: "#aaa", marginBottom: 14,
+              paddingBottom: 10, borderBottom: "1px solid #333",
+            }}>Platform</div>
+            {[
+              { href: "/courses", label: "All Courses" },
+              { href: "/webinars", label: "Live Sessions & Webinars" },
+              { href: "/dashboard", label: "Student Dashboard" },
+              { href: "/about", label: "About Dr. Al-Amin" },
+              { href: "/research", label: "Research & Publications" },
+            ].map(l => (
+              <div key={l.href} style={{ marginBottom: 9 }}>
+                <Link href={l.href} style={{ fontSize: 13, color: "#aaa", textDecoration: "none" }}
+                  className="hover:text-white transition-colors">{l.label}</Link>
+              </div>
+            ))}
+          </div>
+
+          {/* Academic */}
+          <div>
+            <div style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: "0.14em",
+              textTransform: "uppercase", color: "#aaa", marginBottom: 14,
+              paddingBottom: 10, borderBottom: "1px solid #333",
+            }}>Academic Profiles</div>
+            {[
+              { href: "https://scholar.google.com/", label: "Google Scholar" },
+              { href: "https://researchgate.net/", label: "ResearchGate" },
+              { href: "https://linkedin.com/", label: "LinkedIn" },
+              { href: "https://youtube.com/", label: "YouTube Channel" },
+            ].map(l => (
+              <div key={l.label} style={{ marginBottom: 9 }}>
+                <a href={l.href} target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 13, color: "#aaa", textDecoration: "none" }}
+                  className="hover:text-white transition-colors">{l.label} ↗</a>
+              </div>
+            ))}
           </div>
 
           {/* Contact */}
           <div>
-            <div
-              style={{
-                color: "#c9a84c",
-                fontWeight: 600,
-                fontSize: 11,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginBottom: 14,
-              }}
-            >
-              Connect
-            </div>
-            <div className="space-y-2">
-              {[
-                { href: "/contact", label: "Send a Message" },
-                { href: "https://linkedin.com/", label: "LinkedIn Profile" },
-                { href: "https://scholar.google.com/", label: "Google Scholar" },
-                { href: "https://researchgate.net/", label: "ResearchGate" },
-                { href: "https://youtube.com/", label: "YouTube Channel" },
-              ].map((item) => (
-                <div key={item.href}>
-                  <a
-                    href={item.href}
-                    style={{ color: "#9898b8", textDecoration: "none" }}
-                    className="hover:text-amber-300 transition-colors"
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  >
-                    {item.label}
-                  </a>
-                </div>
-              ))}
+            <div style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: "0.14em",
+              textTransform: "uppercase", color: "#aaa", marginBottom: 14,
+              paddingBottom: 10, borderBottom: "1px solid #333",
+            }}>Contact</div>
+            <div style={{ fontSize: 13, color: "#999", lineHeight: 1.8 }}>
+              <div>sarah.alamin@university.edu</div>
+              <div style={{ marginTop: 8 }}>Office Hours: By Appointment</div>
+              <div style={{ marginTop: 8 }}>Zoom sessions available</div>
+              <div style={{ marginTop: 16 }}>
+                <Link href="/contact" style={{
+                  fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                  textTransform: "uppercase", color: "#fff",
+                  background: "#6b1a1a", padding: "8px 16px",
+                  textDecoration: "none", display: "inline-block",
+                }}>Send a Message</Link>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div
-          style={{
-            borderTop: "1px solid #2d2d4e",
-            marginTop: 40,
-            paddingTop: 24,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 12,
-          }}
-        >
-          <span>© {new Date().getFullYear()} Dr. Sarah Al-Amin. All rights reserved.</span>
-          <div className="flex items-center gap-4">
-            <Link href="/contact" style={{ color: "#9898b8", textDecoration: "none" }} className="hover:text-amber-300 transition-colors">
-              Privacy
-            </Link>
-            <Link href="/contact" style={{ color: "#9898b8", textDecoration: "none" }} className="hover:text-amber-300 transition-colors">
-              Terms
-            </Link>
+      {/* Bottom bar */}
+      <div style={{ borderTop: "1px solid #333" }}>
+        <div style={{
+          maxWidth: 1200, margin: "0 auto", padding: "16px 24px",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          flexWrap: "wrap", gap: 12,
+        }}>
+          <span style={{ fontSize: 12, color: "#666" }}>
+            © {new Date().getFullYear()} Dr. Sarah Al-Amin. All rights reserved.
+          </span>
+          <div style={{ display: "flex", gap: 24 }}>
+            {[
+              { href: "/contact", label: "Privacy" },
+              { href: "/contact", label: "Terms of Use" },
+              { href: "/contact", label: "Contact Us" },
+            ].map(l => (
+              <Link key={l.label} href={l.href}
+                style={{ fontSize: 12, color: "#666", textDecoration: "none" }}
+                className="hover:text-white transition-colors">{l.label}</Link>
+            ))}
           </div>
         </div>
       </div>

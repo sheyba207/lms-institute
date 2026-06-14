@@ -4,791 +4,487 @@ import Link from "next/link";
 import { courses } from "@/data/courses";
 
 export const metadata: Metadata = {
-  title: "Dr. Sarah Al-Amin | English Language & Linguistics — Online Courses",
+  title: "Dr. Sarah Al-Amin | English Language & Linguistics",
   description:
-    "PhD Professor in Applied Linguistics. Expert online courses in academic writing, IELTS/TOEFL preparation, English communication, and linguistics. Live webinars and Zoom sessions.",
+    "PhD Professor in Applied Linguistics. Expert online courses in academic writing, IELTS/TOEFL preparation, English communication, and linguistics.",
 };
 
-const lessonTypeIcon: Record<string, string> = {
-  video: "▶",
-  live: "🔴",
-  webinar: "🎙",
-  reading: "📄",
-  assignment: "✍",
-};
+const news = [
+  {
+    day: "12", month: "Jun", year: "2026",
+    title: "New Course: Introduction to Linguistics now open for enrolment",
+    excerpt: "Explore phonetics, morphology, syntax and the social dimensions of language in this university-level course.",
+    href: "/courses/introduction-to-linguistics",
+  },
+  {
+    day: "05", month: "Jun", year: "2026",
+    title: "Webinar Recording Available: IELTS Task 2 — The 5 Essay Types",
+    excerpt: "Students who missed the live session can now access the full 90-minute recording through the student dashboard.",
+    href: "/webinars",
+  },
+  {
+    day: "28", month: "May", year: "2026",
+    title: "Research Paper Accepted: Metacognitive Strategies in Second Language Writing",
+    excerpt: "Dr. Al-Amin's latest research on writing strategies in EFL contexts has been accepted for publication in Applied Linguistics Review.",
+    href: "/about",
+  },
+];
 
-const categoryColor: Record<string, string> = {
-  "Academic Skills": "#4a7c59",
-  "Communication": "#2d6a8a",
-  "Exam Preparation": "#7a4a8a",
-  "Linguistics": "#8a5a2a",
-};
+const upcomingEvents = [
+  {
+    day: "19", month: "Jun",
+    title: "Live Zoom: Academic Writing Workshop",
+    time: "Thursday · 7:00 PM PKT",
+    href: "/webinars",
+  },
+  {
+    day: "21", month: "Jun",
+    title: "Webinar: IELTS Task 2 Essay Types",
+    time: "Saturday · 5:00 PM PKT",
+    href: "/webinars",
+  },
+  {
+    day: "27", month: "Jun",
+    title: "Open Q&A: Ask Dr. Al-Amin Anything",
+    time: "Friday · 6:00 PM PKT",
+    href: "/webinars",
+  },
+];
 
 export default function HomePage() {
-  const featuredCourses = courses.slice(0, 3);
+  const featuredCourses = courses.slice(0, 4);
 
   return (
     <>
-      {/* ─── HERO ──────────────────────────────────────────── */}
-      <section
-        style={{
-          background: "linear-gradient(135deg, #1a1a2e 0%, #2d2d4e 100%)",
-          borderRadius: 16,
-          padding: "64px 48px",
+      {/* ─── HERO ─────────────────────────────────────────────
+          Full-bleed, large, text overlay at bottom-left
+          AKU style: photo-first, white text, burgundy CTA
+      ─────────────────────────────────────────────────────── */}
+      <section style={{ position: "relative", background: "#1a1a1a", overflow: "hidden" }}>
+        {/* Photo placeholder — editorial, university-library feel */}
+        <div style={{
+          width: "100%", height: "clamp(420px, 60vh, 600px)",
+          background: "linear-gradient(160deg, #2a1010 0%, #1a1a2e 40%, #0d1a0d 100%)",
           position: "relative",
-          overflow: "hidden",
-          marginBottom: 64,
-        }}
-      >
-        {/* Decorative quote mark */}
-        <div
-          style={{
-            position: "absolute",
-            top: -20,
-            right: 40,
-            fontSize: 280,
-            color: "rgba(201, 168, 76, 0.05)",
-            fontFamily: "Georgia, serif",
-            lineHeight: 1,
-            pointerEvents: "none",
-            userSelect: "none",
-          }}
-        >
-          "
-        </div>
+        }}>
+          {/* Subtle texture overlay */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: `repeating-linear-gradient(
+              0deg, transparent, transparent 60px,
+              rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px
+            )`,
+          }} />
 
-        <div className="grid gap-12 md:grid-cols-[3fr,2fr] md:items-center relative">
-          <div>
-            {/* Credentials badge */}
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "rgba(201, 168, 76, 0.15)",
-                border: "1px solid rgba(201, 168, 76, 0.4)",
-                borderRadius: 100,
-                padding: "5px 14px",
-                marginBottom: 24,
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 12,
-                color: "#e8cc7a",
-                letterSpacing: "0.04em",
-              }}
-            >
-              <span
-                style={{
-                  width: 7,
-                  height: 7,
-                  borderRadius: "50%",
-                  background: "#c9a84c",
-                  display: "inline-block",
-                  flexShrink: 0,
-                }}
-              />
-              PhD Applied Linguistics · University Professor · 10+ Years Teaching
+          {/* Text panel — bottom left, AKU style */}
+          <div style={{
+            position: "absolute", bottom: 0, left: 0,
+            maxWidth: 560,
+            background: "rgba(10,5,5,0.82)",
+            padding: "32px 40px 36px",
+            backdropFilter: "blur(2px)",
+          }}>
+            <div style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: "0.16em",
+              textTransform: "uppercase", color: "#cc9999", marginBottom: 12,
+              fontFamily: "Arial, sans-serif",
+            }}>
+              PhD · Applied Linguistics · English Language
             </div>
-
-            <h1
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "clamp(32px, 5vw, 54px)",
-                fontWeight: 700,
-                color: "#faf8f2",
-                lineHeight: 1.15,
-                marginBottom: 20,
-              }}
-            >
-              Where Language Becomes
-              <span
-                style={{
-                  display: "block",
-                  background: "linear-gradient(90deg, #c9a84c, #e8cc7a, #c9a84c)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Your Greatest Asset.
-              </span>
+            <h1 style={{
+              fontFamily: "'Times New Roman', Times, serif",
+              fontSize: "clamp(26px, 4vw, 44px)",
+              fontWeight: "normal", color: "#fff", lineHeight: 1.15, marginBottom: 16,
+            }}>
+              Teaching Language.<br />
+              Expanding Minds.
             </h1>
-
-            <p
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 17,
-                color: "#b0b0d0",
-                lineHeight: 1.8,
-                maxWidth: 520,
-                marginBottom: 32,
-              }}
-            >
-              Expert-led courses in academic writing, professional English,
-              linguistics, and exam preparation — taught by a university professor
-              who has dedicated her career to making language accessible,
-              meaningful, and transformative.
+            <p style={{
+              fontFamily: "Arial, sans-serif", fontSize: 14, color: "#ccc",
+              lineHeight: 1.7, marginBottom: 24, maxWidth: 420,
+            }}>
+              Expert-led courses in academic writing, linguistics, and English
+              communication — from a university professor with a decade of
+              teaching and published research.
             </p>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                href="/courses"
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 14,
-                  background: "linear-gradient(135deg, #c9a84c 0%, #e8cc7a 100%)",
-                  color: "#1a1a2e",
-                  padding: "13px 28px",
-                  borderRadius: 6,
-                  textDecoration: "none",
-                  letterSpacing: "0.02em",
-                  display: "inline-block",
-                }}
-              >
-                Explore All Courses
-              </Link>
-              <Link
-                href="/webinars"
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 14,
-                  color: "#c8c8e0",
-                  border: "1px solid #4a4a6a",
-                  padding: "12px 24px",
-                  borderRadius: 6,
-                  textDecoration: "none",
-                  display: "inline-block",
-                }}
-              >
-                Upcoming Live Sessions →
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link href="/courses" className="btn-primary">Explore Courses</Link>
+              <Link href="/webinars" className="btn-outline" style={{ color: "#fff", borderColor: "rgba(255,255,255,0.4)" }}>
+                Upcoming Sessions
               </Link>
             </div>
+          </div>
 
-            {/* Stats */}
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 32,
-                marginTop: 40,
-                paddingTop: 32,
-                borderTop: "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
+          {/* Stat strip — bottom right */}
+          <div style={{
+            position: "absolute", bottom: 0, right: 0,
+            display: "flex", gap: 0,
+          }} className="hidden md:flex">
+            {[
+              { value: "PhD", label: "Applied Linguistics" },
+              { value: "10+", label: "Years Teaching" },
+              { value: "4", label: "Online Courses" },
+            ].map((s, i) => (
+              <div key={s.label} style={{
+                padding: "20px 28px",
+                background: i === 0 ? "#6b1a1a" : i === 1 ? "#4e1010" : "#3a0c0c",
+                textAlign: "center",
+                borderLeft: "1px solid rgba(255,255,255,0.1)",
+              }}>
+                <div style={{
+                  fontFamily: "'Times New Roman', serif",
+                  fontSize: 26, color: "#fff", lineHeight: 1,
+                }}>{s.value}</div>
+                <div style={{
+                  fontSize: 10, color: "#ffcccc", marginTop: 4,
+                  letterSpacing: "0.08em", textTransform: "uppercase",
+                  fontFamily: "Arial, sans-serif",
+                }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── NEWS + EVENTS ────────────────────────────────────
+          AKU layout: left = news list, right = events list
+          Both with date-blocks, hairline rules, all-caps labels
+      ─────────────────────────────────────────────────────── */}
+      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "52px 24px" }}>
+        <div style={{ display: "grid", gap: "48px 64px" }} className="grid-cols-1 md:grid-cols-[3fr,2fr]">
+
+          {/* News */}
+          <div>
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "baseline",
+              borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 0,
+            }}>
+              <span className="uppercase-label" style={{ color: "#1a1a1a" }}>Latest News</span>
+              <Link href="/about" style={{
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                textTransform: "uppercase", color: "#6b1a1a", textDecoration: "none",
+              }}>View All →</Link>
+            </div>
+
+            {news.map((item, i) => (
+              <Link key={i} href={item.href} style={{ textDecoration: "none" }}>
+                <div className="card-link" style={{
+                  display: "flex", gap: 18, padding: "20px 0", alignItems: "flex-start",
+                }}>
+                  <div className="date-block">
+                    <span className="day">{item.day}</span>
+                    <span className="month">{item.month}</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontFamily: "'Times New Roman', serif",
+                      fontSize: 16, color: "#1a1a1a", lineHeight: 1.3,
+                      marginBottom: 6,
+                    }}>{item.title}</div>
+                    <p style={{
+                      fontFamily: "Arial, sans-serif",
+                      fontSize: 13, color: "#666", lineHeight: 1.6,
+                    }}>{item.excerpt}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Events */}
+          <div>
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "baseline",
+              borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 0,
+            }}>
+              <span className="uppercase-label" style={{ color: "#1a1a1a" }}>Upcoming Sessions</span>
+              <Link href="/webinars" style={{
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                textTransform: "uppercase", color: "#6b1a1a", textDecoration: "none",
+              }}>View All →</Link>
+            </div>
+
+            {upcomingEvents.map((ev, i) => (
+              <Link key={i} href={ev.href} style={{ textDecoration: "none" }}>
+                <div className="card-link" style={{
+                  display: "flex", gap: 16, padding: "18px 0", alignItems: "flex-start",
+                }}>
+                  <div className="date-block" style={{ minHeight: 46 }}>
+                    <span className="day">{ev.day}</span>
+                    <span className="month">{ev.month}</span>
+                  </div>
+                  <div>
+                    <div style={{
+                      fontFamily: "'Times New Roman', serif",
+                      fontSize: 15, color: "#1a1a1a", lineHeight: 1.3, marginBottom: 4,
+                    }}>{ev.title}</div>
+                    <div style={{
+                      fontFamily: "Arial, sans-serif",
+                      fontSize: 12, color: "#6b1a1a",
+                    }}>{ev.time}</div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+
+            {/* Quick links panel */}
+            <div style={{ marginTop: 32, background: "#f7f6f4", padding: "20px 20px" }}>
+              <div className="uppercase-label" style={{ color: "#666", marginBottom: 14 }}>Quick Links</div>
               {[
-                { value: "PhD", label: "Applied Linguistics" },
-                { value: "10+", label: "Years University Teaching" },
-                { value: "4", label: "Specialist Courses" },
-                { value: "Live", label: "Zoom & Webinar Sessions" },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <div
-                    style={{
-                      fontFamily: "Georgia, serif",
-                      fontSize: 22,
-                      fontWeight: 700,
-                      color: "#e8cc7a",
-                    }}
-                  >
-                    {stat.value}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "system-ui, sans-serif",
-                      fontSize: 11,
-                      color: "#7878a0",
-                      marginTop: 2,
-                    }}
-                  >
-                    {stat.label}
-                  </div>
+                { label: "Student Dashboard", href: "/dashboard" },
+                { label: "About Dr. Al-Amin", href: "/about" },
+                { label: "Research & Publications", href: "/research" },
+                { label: "Contact & Office Hours", href: "/contact" },
+              ].map(l => (
+                <div key={l.label} style={{ borderBottom: "1px solid #e8e4e0" }}>
+                  <Link href={l.href} style={{
+                    display: "block", padding: "9px 0",
+                    fontFamily: "Arial, sans-serif", fontSize: 13, color: "#333",
+                    textDecoration: "none",
+                  }}
+                    className="hover:text-burgundy transition-colors">
+                    {l.label}
+                  </Link>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Right panel — live session card */}
-          <div className="hidden md:block">
-            <div
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(201, 168, 76, 0.25)",
-                borderRadius: 12,
-                padding: 24,
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 11,
-                  color: "#c9a84c",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  marginBottom: 16,
-                }}
-              >
-                🔴 Upcoming Live Session
-              </div>
-              <div
-                style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: 16,
-                  color: "#faf8f2",
-                  lineHeight: 1.4,
-                  marginBottom: 12,
-                }}
-              >
-                Academic Writing Workshop: Writing Introductions That Hook
-              </div>
-              <div
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 12,
-                  color: "#7878a0",
-                  marginBottom: 20,
-                }}
-              >
-                Zoom Session · Thursday 7:00 PM · Open to all students
-              </div>
+      {/* ─── COURSES SECTION ──────────────────────────────────
+          AKU "Our Programmes" style: name + tagline grid
+      ─────────────────────────────────────────────────────── */}
+      <section style={{ background: "#f7f6f4", borderTop: "1px solid #d0cdc8", borderBottom: "1px solid #d0cdc8" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "52px 24px" }}>
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+            borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 32,
+          }}>
+            <span className="uppercase-label" style={{ color: "#1a1a1a" }}>Courses</span>
+            <Link href="/courses" style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+              textTransform: "uppercase", color: "#6b1a1a", textDecoration: "none",
+            }}>View All Courses →</Link>
+          </div>
 
-              <div
-                style={{
-                  borderTop: "1px solid rgba(255,255,255,0.08)",
-                  paddingTop: 16,
-                  marginTop: 4,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "system-ui, sans-serif",
-                    fontSize: 11,
-                    color: "#7878a0",
-                    marginBottom: 14,
-                  }}
-                >
-                  Learning Schedule This Week
-                </div>
-                {[
-                  { day: "Mon", label: "Video: Thesis Statement Craft", done: true },
-                  { day: "Wed", label: "Reading: Discourse Markers", done: true },
-                  { day: "Thu", label: "Live Zoom — Writing Workshop", done: false },
-                  { day: "Sat", label: "Webinar: Q&A Open Session", done: false },
-                ].map((item) => (
-                  <div
-                    key={item.day}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 10,
-                      fontFamily: "system-ui, sans-serif",
-                      fontSize: 12,
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: 28,
-                        textAlign: "center",
-                        color: "#c9a84c",
-                        fontWeight: 600,
-                        fontSize: 10,
-                      }}
-                    >
-                      {item.day}
-                    </span>
-                    <div
-                      style={{
-                        width: 16,
-                        height: 16,
-                        borderRadius: "50%",
-                        border: "1.5px solid",
-                        borderColor: item.done ? "#4a7c59" : "#4a4a6a",
-                        background: item.done ? "#4a7c59" : "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 9,
-                        color: "#fff",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {item.done ? "✓" : ""}
-                    </div>
-                    <span style={{ color: item.done ? "#5a9a6a" : "#c8c8e0" }}>
-                      {item.label}
-                    </span>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 0 }}>
+            {featuredCourses.map((course, i) => (
+              <div key={course.slug} style={{
+                borderRight: i < featuredCourses.length - 1 ? "1px solid #d0cdc8" : "none",
+                padding: "0 32px 0 (i === 0 ? 0 : 32px)",
+                paddingLeft: i === 0 ? 0 : 32,
+                paddingRight: i === featuredCourses.length - 1 ? 0 : 32,
+              }}>
+                <div style={{
+                  borderTop: "3px solid #6b1a1a",
+                  paddingTop: 20, paddingBottom: 28,
+                }}>
+                  <div style={{
+                    fontSize: 10, fontWeight: 700, letterSpacing: "0.12em",
+                    textTransform: "uppercase", color: "#6b1a1a",
+                    fontFamily: "Arial, sans-serif", marginBottom: 10,
+                  }}>{course.category}</div>
+                  <h3 style={{
+                    fontFamily: "'Times New Roman', serif",
+                    fontSize: 18, fontWeight: "normal", color: "#1a1a1a",
+                    lineHeight: 1.25, marginBottom: 10,
+                  }}>{course.title}</h3>
+                  <p style={{
+                    fontFamily: "Arial, sans-serif",
+                    fontSize: 13, color: "#666", lineHeight: 1.6, marginBottom: 18,
+                  }}>{course.tagline}</p>
+                  <div style={{
+                    display: "flex", justifyContent: "space-between", alignItems: "center",
+                    borderTop: "1px solid #d0cdc8", paddingTop: 14,
+                    fontSize: 12, color: "#999", fontFamily: "Arial, sans-serif",
+                  }}>
+                    <span>{course.level} · {course.duration}</span>
                   </div>
+                  <div style={{ marginTop: 14 }}>
+                    <Link href={`/courses/${course.slug}`} style={{
+                      fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                      textTransform: "uppercase", color: "#6b1a1a", textDecoration: "none",
+                    }}>Explore →</Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── PROFESSOR SECTION ─────────────────────────────── */}
+      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 24px" }}>
+        <div style={{ display: "grid", gap: "48px 64px" }} className="grid-cols-1 md:grid-cols-2">
+          {/* Left: photo / monogram */}
+          <div style={{
+            background: "#f7f6f4",
+            border: "1px solid #d0cdc8",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            minHeight: 340, padding: 48,
+          }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{
+                width: 120, height: 120, border: "2px solid #6b1a1a",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                margin: "0 auto 20px",
+              }}>
+                <span style={{
+                  fontFamily: "'Times New Roman', serif", fontSize: 40,
+                  color: "#6b1a1a", fontWeight: "normal",
+                }}>SA</span>
+              </div>
+              <div style={{
+                fontFamily: "'Times New Roman', serif",
+                fontSize: 22, color: "#1a1a1a", marginBottom: 4,
+              }}>Dr. Sarah Al-Amin</div>
+              <div style={{
+                fontSize: 12, color: "#6b1a1a", letterSpacing: "0.06em",
+                fontFamily: "Arial, sans-serif",
+              }}>PhD Applied Linguistics</div>
+              <div style={{ marginTop: 24, display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+                {["Google Scholar", "ResearchGate", "LinkedIn"].map(name => (
+                  <a key={name} href="#" target="_blank" rel="noopener noreferrer"
+                    style={{
+                      fontSize: 11, color: "#6b1a1a", border: "1px solid #6b1a1a",
+                      padding: "4px 10px", textDecoration: "none",
+                      fontFamily: "Arial, sans-serif",
+                    }}>
+                    {name} ↗
+                  </a>
                 ))}
               </div>
+            </div>
+          </div>
 
-              <Link
-                href="/dashboard"
-                style={{
-                  display: "block",
-                  marginTop: 18,
-                  textAlign: "center",
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 13,
-                  color: "#1a1a2e",
-                  background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
-                  padding: "10px",
-                  borderRadius: 6,
-                  textDecoration: "none",
-                  fontWeight: 600,
-                }}
-              >
-                Go to My Dashboard
-              </Link>
+          {/* Right: text */}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <div style={{
+              borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 24,
+            }}>
+              <span className="uppercase-label" style={{ color: "#1a1a1a" }}>About the Professor</span>
+            </div>
+            <h2 style={{
+              fontFamily: "'Times New Roman', serif",
+              fontSize: "clamp(22px, 3vw, 32px)", fontWeight: "normal",
+              color: "#1a1a1a", lineHeight: 1.2, marginBottom: 18,
+            }}>
+              A decade of teaching language — now available online.
+            </h2>
+            <p style={{
+              fontFamily: "Arial, sans-serif", fontSize: 14,
+              color: "#555", lineHeight: 1.8, marginBottom: 14,
+            }}>
+              Dr. Al-Amin holds a PhD in Applied Linguistics and has taught at the
+              university level for over ten years. Her research spans second language
+              acquisition, academic discourse, and EFL pedagogy — published in leading
+              international journals.
+            </p>
+            <p style={{
+              fontFamily: "Arial, sans-serif", fontSize: 14,
+              color: "#555", lineHeight: 1.8, marginBottom: 28,
+            }}>
+              This platform brings her expertise directly to students worldwide —
+              through video courses, live Zoom sessions, webinars, and personalised
+              assignment feedback.
+            </p>
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+              <Link href="/about" className="btn-primary">Full Profile &amp; Publications</Link>
+              <Link href="/contact" className="btn-outline">Get in Touch</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── FEATURED COURSES ──────────────────────────── */}
-      <section style={{ marginBottom: 72 }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            marginBottom: 32,
-          }}
-        >
+      {/* ─── LEARNING FORMATS ──────────────────────────────── */}
+      <section style={{ background: "#f7f6f4", borderTop: "1px solid #d0cdc8" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "52px 24px" }}>
+          <div style={{
+            borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 32,
+          }}>
+            <span className="uppercase-label" style={{ color: "#1a1a1a" }}>How You Will Learn</span>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0" }}>
+            {[
+              { label: "Video Lectures", icon: "▶", desc: "Carefully produced lessons structured to build skill progressively — watch anytime, at your own pace." },
+              { label: "Live Zoom Classes", icon: "⬤", desc: "Interactive sessions where you practise, ask questions, and receive guidance from Dr. Al-Amin in real time." },
+              { label: "Expert Webinars", icon: "🎙", desc: "Deep-dive sessions on specific topics — open to all students and recorded for later viewing." },
+              { label: "Assignment Feedback", icon: "✍", desc: "Submit written work and receive detailed, personalised feedback from the professor herself." },
+            ].map((item, i) => (
+              <div key={item.label} style={{
+                padding: "28px 32px",
+                borderLeft: i > 0 ? "1px solid #d0cdc8" : "none",
+                borderTop: "3px solid #6b1a1a",
+              }}>
+                <div style={{
+                  fontFamily: "Arial, sans-serif", fontSize: 22,
+                  color: "#6b1a1a", marginBottom: 12,
+                }}>{item.icon}</div>
+                <div style={{
+                  fontFamily: "'Times New Roman', serif", fontSize: 17,
+                  color: "#1a1a1a", marginBottom: 10,
+                }}>{item.label}</div>
+                <p style={{
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: 13, color: "#666", lineHeight: 1.7,
+                }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── QUOTE BANNER ──────────────────────────────────── */}
+      <section style={{
+        background: "#6b1a1a",
+        padding: "52px 24px",
+        borderTop: "1px solid #4e1010",
+      }}>
+        <div style={{ maxWidth: 840, margin: "0 auto", textAlign: "center" }}>
+          <div style={{
+            fontFamily: "'Times New Roman', serif",
+            fontSize: "clamp(18px, 2.5vw, 26px)",
+            fontStyle: "italic", color: "#fff",
+            lineHeight: 1.65, marginBottom: 28,
+          }}>
+            "I built this platform because I believe every learner deserves access
+            to the same quality of instruction that universities offer — and sometimes more.
+            Language is the foundation of thought. When you master it, everything else becomes possible."
+          </div>
+          <div style={{
+            fontFamily: "Arial, sans-serif",
+            fontSize: 12, letterSpacing: "0.1em",
+            textTransform: "uppercase", color: "#ffbbbb",
+          }}>
+            Dr. Sarah Al-Amin · PhD Applied Linguistics · Founder &amp; Lead Instructor
+          </div>
+        </div>
+      </section>
+
+      {/* ─── LIFELONG LEARNING CTA ─────────────────────────── */}
+      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "52px 24px" }}>
+        <div style={{
+          display: "flex", justifyContent: "space-between",
+          alignItems: "center", flexWrap: "wrap", gap: 24,
+          borderTop: "1px solid #d0cdc8", paddingTop: 40,
+        }}>
           <div>
-            <div
-              style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                color: "#c9a84c",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                marginBottom: 8,
-              }}
-            >
-              Courses by Dr. Al-Amin
+            <div className="uppercase-label" style={{ color: "#6b1a1a", marginBottom: 10 }}>
+              Start Learning Today
             </div>
-            <h2
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 30,
-                fontWeight: 700,
-                color: "#1a1a2e",
-              }}
-            >
-              Learn Something That Lasts
+            <h2 style={{
+              fontFamily: "'Times New Roman', serif",
+              fontSize: "clamp(22px, 3vw, 34px)", fontWeight: "normal", color: "#1a1a1a",
+            }}>
+              Your next lesson is waiting.
             </h2>
           </div>
-          <Link
-            href="/courses"
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 13,
-              color: "#c9a84c",
-              textDecoration: "none",
-              fontWeight: 600,
-            }}
-          >
-            View all →
-          </Link>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {featuredCourses.map((course) => {
-            const catColor = categoryColor[course.category] || "#4a4a6a";
-            return (
-              <Link
-                key={course.slug}
-                href={`/courses/${course.slug}`}
-                style={{ textDecoration: "none" }}
-              >
-                <div
-                  className="card-hover"
-                  style={{
-                    background: "#fff",
-                    border: "1px solid #e8e4d8",
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    height: "100%",
-                  }}
-                >
-                  {/* Course color bar */}
-                  <div style={{ height: 4, background: catColor }} />
-                  <div style={{ padding: "22px 22px 20px" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        marginBottom: 12,
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: "system-ui, sans-serif",
-                          fontSize: 10,
-                          fontWeight: 700,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          color: catColor,
-                          background: `${catColor}15`,
-                          padding: "3px 9px",
-                          borderRadius: 100,
-                        }}
-                      >
-                        {course.category}
-                      </span>
-                      {course.badge && (
-                        <span
-                          style={{
-                            fontFamily: "system-ui, sans-serif",
-                            fontSize: 10,
-                            fontWeight: 700,
-                            background: "#c9a84c",
-                            color: "#1a1a2e",
-                            padding: "3px 9px",
-                            borderRadius: 100,
-                          }}
-                        >
-                          {course.badge}
-                        </span>
-                      )}
-                    </div>
-
-                    <h3
-                      style={{
-                        fontFamily: "Georgia, serif",
-                        fontSize: 17,
-                        fontWeight: 700,
-                        color: "#1a1a2e",
-                        lineHeight: 1.3,
-                        marginBottom: 8,
-                      }}
-                    >
-                      {course.title}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: "system-ui, sans-serif",
-                        fontSize: 12,
-                        color: "#6060808",
-                        lineHeight: 1.6,
-                        marginBottom: 16,
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {course.tagline}
-                    </p>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        paddingTop: 14,
-                        borderTop: "1px solid #f0ece0",
-                        fontFamily: "system-ui, sans-serif",
-                        fontSize: 11,
-                        color: "#9898b8",
-                      }}
-                    >
-                      <span>{course.level}</span>
-                      <span>{course.duration} · {course.lessons.length} lessons</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ─── WHAT MAKES THIS DIFFERENT ──────────────────── */}
-      <section
-        style={{
-          background: "#fff",
-          border: "1px solid #e8e4d8",
-          borderRadius: 16,
-          padding: "48px 48px",
-          marginBottom: 72,
-        }}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: 48,
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 11,
-              fontWeight: 700,
-              color: "#c9a84c",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              marginBottom: 10,
-            }}
-          >
-            The Learning Experience
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+            <Link href="/courses" className="btn-primary">Browse All Courses</Link>
+            <Link href="/contact" className="btn-outline">Ask Dr. Al-Amin</Link>
           </div>
-          <h2
-            style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 30,
-              fontWeight: 700,
-              color: "#1a1a2e",
-            }}
-          >
-            More Than Pre-Recorded Videos
-          </h2>
-          <p
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 14,
-              color: "#7878a0",
-              maxWidth: 500,
-              margin: "12px auto 0",
-              lineHeight: 1.7,
-            }}
-          >
-            Real interaction with a real professor — the kind of learning
-            that changes how you think, not just what you know.
-          </p>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {[
-            {
-              icon: "▶",
-              title: "Video Lectures",
-              desc: "Carefully produced lessons you can revisit anytime — structured, clear, and designed to build on each other.",
-              color: "#2d6a8a",
-            },
-            {
-              icon: "🔴",
-              title: "Live Zoom Classes",
-              desc: "Interactive sessions where you can ask questions, practice in real time, and connect with fellow learners.",
-              color: "#8a2d2d",
-            },
-            {
-              icon: "🎙",
-              title: "Expert Webinars",
-              desc: "Deep-dive sessions on topics like dissertation writing, IELTS strategies, and professional communication.",
-              color: "#4a7c59",
-            },
-            {
-              icon: "✍",
-              title: "Personalised Feedback",
-              desc: "Submit assignments and receive detailed, specific feedback from Dr. Al-Amin herself.",
-              color: "#7a4a8a",
-            },
-          ].map((item) => (
-            <div key={item.title} style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 12,
-                  background: `${item.color}15`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 24,
-                  margin: "0 auto 16px",
-                  border: `1px solid ${item.color}30`,
-                }}
-              >
-                {item.icon}
-              </div>
-              <div
-                style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: "#1a1a2e",
-                  marginBottom: 8,
-                }}
-              >
-                {item.title}
-              </div>
-              <p
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 12,
-                  color: "#7878a0",
-                  lineHeight: 1.7,
-                }}
-              >
-                {item.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── PROFESSOR QUOTE ────────────────────────────── */}
-      <section
-        style={{
-          background: "linear-gradient(135deg, #1a1a2e 0%, #2d2d4e 100%)",
-          borderRadius: 16,
-          padding: "52px 64px",
-          marginBottom: 72,
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: -30,
-            left: 30,
-            fontSize: 200,
-            color: "rgba(201,168,76,0.06)",
-            fontFamily: "Georgia, serif",
-            lineHeight: 1,
-            pointerEvents: "none",
-          }}
-        >
-          "
-        </div>
-        <div style={{ position: "relative", maxWidth: 700 }}>
-          <blockquote
-            style={{
-              fontFamily: "Georgia, serif",
-              fontSize: "clamp(18px, 2.5vw, 24px)",
-              fontStyle: "italic",
-              color: "#e8e4d8",
-              lineHeight: 1.65,
-              marginBottom: 28,
-            }}
-          >
-            "I built this platform because I believe every learner deserves access to
-            the same quality of instruction that universities offer — and sometimes more.
-            Language is the foundation of thought. When you master it, everything else becomes possible."
-          </blockquote>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
-            }}
-          >
-            <div
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: "Georgia, serif",
-                fontSize: 18,
-                fontWeight: 700,
-                color: "#1a1a2e",
-                flexShrink: 0,
-              }}
-            >
-              S
-            </div>
-            <div>
-              <div
-                style={{
-                  fontFamily: "Georgia, serif",
-                  fontWeight: 700,
-                  color: "#faf8f2",
-                  fontSize: 15,
-                }}
-              >
-                Dr. Sarah Al-Amin
-              </div>
-              <div
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 12,
-                  color: "#c9a84c",
-                }}
-              >
-                PhD Applied Linguistics · Founder & Lead Instructor
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── CTA ────────────────────────────────────────── */}
-      <section style={{ textAlign: "center", marginBottom: 24 }}>
-        <div
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 11,
-            fontWeight: 700,
-            color: "#c9a84c",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            marginBottom: 12,
-          }}
-        >
-          Ready to Begin?
-        </div>
-        <h2
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 34,
-            fontWeight: 700,
-            color: "#1a1a2e",
-            marginBottom: 16,
-          }}
-        >
-          Your next lesson is waiting.
-        </h2>
-        <p
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 14,
-            color: "#7878a0",
-            maxWidth: 480,
-            margin: "0 auto 28px",
-            lineHeight: 1.7,
-          }}
-        >
-          Browse courses, register for the next live Zoom session, or
-          send Dr. Al-Amin a message about your learning goals.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link
-            href="/courses"
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              background: "linear-gradient(135deg, #c9a84c 0%, #e8cc7a 100%)",
-              color: "#1a1a2e",
-              padding: "13px 28px",
-              borderRadius: 6,
-              textDecoration: "none",
-            }}
-          >
-            Browse All Courses
-          </Link>
-          <Link
-            href="/contact"
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 14,
-              color: "#1a1a2e",
-              border: "2px solid #c9a84c",
-              padding: "11px 24px",
-              borderRadius: 6,
-              textDecoration: "none",
-            }}
-          >
-            Get in Touch
-          </Link>
         </div>
       </section>
     </>

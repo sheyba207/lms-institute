@@ -4,367 +4,128 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Live Sessions & Webinars | Dr. Sarah Al-Amin",
-  description:
-    "Join Dr. Sarah Al-Amin for live Zoom classes, expert webinars, and interactive language learning sessions. Upcoming schedule and recordings.",
+  description: "Upcoming live Zoom classes and webinars with Dr. Sarah Al-Amin. Open sessions, expert webinars, and recorded archives.",
 };
 
-const upcomingSessions = [
-  {
-    id: 1,
-    type: "Live Zoom",
-    typeColor: "#8a2d2d",
-    typeBg: "#fff0f0",
-    title: "Academic Writing Workshop: Crafting Powerful Introductions",
-    description:
-      "A hands-on session where students share their introductions and receive live feedback. Covers thesis placement, hook strategies, and background context.",
-    date: "Thursday, 19 June 2026",
-    time: "7:00 PM – 8:30 PM (PKT)",
-    duration: "90 minutes",
-    seats: "Limited to 20 participants",
-    course: "Academic Writing Mastery",
-    courseSlug: "academic-writing-mastery",
-    free: false,
-  },
-  {
-    id: 2,
-    type: "Webinar",
-    typeColor: "#5a2d8a",
-    typeBg: "#f4f0ff",
-    title: "IELTS Task 2 Writing: The 5 Essay Types Explained",
-    description:
-      "Dr. Al-Amin walks through all five Task 2 essay types — opinion, discussion, problem/solution, two-part question, and advantage/disadvantage — with annotated model answers.",
-    date: "Saturday, 21 June 2026",
-    time: "5:00 PM – 6:30 PM (PKT)",
-    duration: "90 minutes",
-    seats: "Open to all",
-    course: "IELTS & TOEFL Preparation",
-    courseSlug: "ielts-toefl-preparation",
-    free: true,
-  },
-  {
-    id: 3,
-    type: "Live Zoom",
-    typeColor: "#8a2d2d",
-    typeBg: "#fff0f0",
-    title: "English Communication: Professional Email Masterclass",
-    description:
-      "Live writing and editing session focused on professional email tone, structure, and vocabulary. Participants submit real emails for live rewriting.",
-    date: "Wednesday, 25 June 2026",
-    time: "8:00 PM – 9:00 PM (PKT)",
-    duration: "60 minutes",
-    seats: "Limited to 15 participants",
-    course: "English Communication Skills",
-    courseSlug: "english-communication-skills",
-    free: false,
-  },
-  {
-    id: 4,
-    type: "Webinar",
-    typeColor: "#5a2d8a",
-    typeBg: "#f4f0ff",
-    title: "Open Q&A: Ask Dr. Al-Amin Anything",
-    description:
-      "A monthly open session where any student can bring questions about English language, exam preparation, academic writing, or linguistics. No agenda — just answers.",
-    date: "Friday, 27 June 2026",
-    time: "6:00 PM – 7:00 PM (PKT)",
-    duration: "60 minutes",
-    seats: "Open to all",
-    course: "All Courses",
-    courseSlug: null,
-    free: true,
-  },
+const upcoming = [
+  { day: "19", month: "Jun", type: "Live Zoom", title: "Academic Writing Workshop: Crafting Powerful Introductions", time: "Thursday · 7:00 PM PKT", duration: "90 min", seats: "Limited to 20", course: "Academic Writing Mastery", slug: "academic-writing-mastery", free: false },
+  { day: "21", month: "Jun", type: "Webinar", title: "IELTS Task 2 Writing: The 5 Essay Types Explained", time: "Saturday · 5:00 PM PKT", duration: "90 min", seats: "Open to all", course: "IELTS & TOEFL Preparation", slug: "ielts-toefl-preparation", free: true },
+  { day: "25", month: "Jun", type: "Live Zoom", title: "English Communication: Professional Email Masterclass", time: "Wednesday · 8:00 PM PKT", duration: "60 min", seats: "Limited to 15", course: "English Communication Skills", slug: "english-communication-skills", free: false },
+  { day: "27", month: "Jun", type: "Webinar", title: "Open Q&A: Ask Dr. Al-Amin Anything", time: "Friday · 6:00 PM PKT", duration: "60 min", seats: "Open to all", course: "All Courses", slug: null, free: true },
 ];
 
 const pastRecordings = [
-  {
-    title: "Discourse Markers and Cohesion in Academic Writing",
-    date: "7 June 2026",
-    type: "Webinar",
-    duration: "75 min",
-  },
-  {
-    title: "IELTS Speaking Part 2: Structuring Your Response",
-    date: "1 June 2026",
-    type: "Live Zoom",
-    duration: "60 min",
-  },
-  {
-    title: "Introduction to Linguistics: Language as a System",
-    date: "25 May 2026",
-    type: "Webinar",
-    duration: "90 min",
-  },
+  { title: "Discourse Markers and Cohesion in Academic Writing", date: "7 Jun 2026", type: "Webinar", dur: "75 min" },
+  { title: "IELTS Speaking Part 2: Structuring Your Response", date: "1 Jun 2026", type: "Live Zoom", dur: "60 min" },
+  { title: "Introduction to Linguistics: Language as a System", date: "25 May 2026", type: "Webinar", dur: "90 min" },
 ];
 
 export default function WebinarsPage() {
   return (
-    <div>
-      {/* Header */}
-      <div style={{ marginBottom: 52 }}>
-        <div
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 11,
-            fontWeight: 700,
-            color: "#c9a84c",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            marginBottom: 10,
-          }}
-        >
-          Interactive Learning
-        </div>
-        <h1
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: "clamp(28px, 4vw, 42px)",
-            fontWeight: 700,
-            color: "#1a1a2e",
-            lineHeight: 1.15,
-            marginBottom: 14,
-          }}
-        >
-          Live Sessions & Webinars
-        </h1>
-        <p
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 15,
-            color: "#7878a0",
-            maxWidth: 580,
-            lineHeight: 1.7,
-          }}
-        >
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+
+      {/* Title bar */}
+      <div style={{ borderBottom: "1px solid #d0cdc8", padding: "32px 0 20px", marginBottom: 40 }}>
+        <div className="uppercase-label" style={{ color: "#6b1a1a", marginBottom: 8 }}>Interactive Learning</div>
+        <h1 style={{
+          fontFamily: "'Times New Roman', serif",
+          fontSize: "clamp(28px, 4vw, 44px)", fontWeight: "normal", color: "#1a1a1a",
+        }}>Live Sessions &amp; Webinars</h1>
+        <p style={{
+          fontFamily: "Arial, sans-serif", fontSize: 14, color: "#666",
+          marginTop: 8, maxWidth: 600,
+        }}>
           Real-time learning with Dr. Al-Amin. Zoom classes for enrolled students,
-          open webinars for everyone, and recorded sessions you can revisit anytime.
+          open webinars for everyone, and recorded sessions available on demand.
         </p>
       </div>
 
       {/* Legend */}
-      <div
-        style={{
-          display: "flex",
-          gap: 20,
-          marginBottom: 36,
-          flexWrap: "wrap",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: 12,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <span
-            style={{
-              background: "#fff0f0",
-              color: "#8a2d2d",
-              padding: "3px 10px",
-              borderRadius: 4,
-              fontWeight: 700,
-              fontSize: 11,
-            }}
-          >
-            🔴 Live Zoom
+      <div style={{ display: "flex", gap: 32, marginBottom: 32, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{
+            fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.1em", textTransform: "uppercase",
+            color: "#6b1a1a", border: "1px solid #6b1a1a", padding: "3px 10px",
+          }}>Live Zoom</span>
+          <span style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: "#666" }}>
+            Interactive · limited seats · requires enrolment
           </span>
-          <span style={{ color: "#7878a0" }}>Interactive, limited seats, requires enrolment</span>
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <span
-            style={{
-              background: "#f4f0ff",
-              color: "#5a2d8a",
-              padding: "3px 10px",
-              borderRadius: 4,
-              fontWeight: 700,
-              fontSize: 11,
-            }}
-          >
-            🎙 Webinar
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{
+            fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.1em", textTransform: "uppercase",
+            color: "#333", border: "1px solid #999", padding: "3px 10px",
+          }}>Webinar</span>
+          <span style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: "#666" }}>
+            Open to all · recorded for later viewing
           </span>
-          <span style={{ color: "#7878a0" }}>Open to all, recorded for later viewing</span>
         </div>
       </div>
 
-      {/* Upcoming sessions */}
-      <h2
-        style={{
-          fontFamily: "Georgia, serif",
-          fontSize: 22,
-          fontWeight: 700,
-          color: "#1a1a2e",
-          marginBottom: 24,
-          paddingBottom: 12,
-          borderBottom: "2px solid #c9a84c",
-          display: "inline-block",
-        }}
-      >
-        Upcoming Sessions — June 2026
-      </h2>
+      {/* Upcoming */}
+      <div style={{ borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 0 }}>
+        <span className="uppercase-label" style={{ color: "#1a1a1a" }}>Upcoming Sessions — June 2026</span>
+      </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 60 }}>
-        {upcomingSessions.map((session) => (
-          <div
-            key={session.id}
-            style={{
-              background: "#fff",
-              border: "1px solid #e8e4d8",
-              borderRadius: 14,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "5px 1fr",
-              }}
-            >
-              <div style={{ background: session.typeColor }} />
-              <div style={{ padding: "24px 28px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    flexWrap: "wrap",
-                    gap: 12,
-                    marginBottom: 14,
-                  }}
-                >
-                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                    <span
-                      style={{
-                        fontFamily: "system-ui, sans-serif",
-                        fontSize: 11,
-                        fontWeight: 700,
-                        background: session.typeBg,
-                        color: session.typeColor,
-                        padding: "3px 10px",
-                        borderRadius: 4,
-                      }}
-                    >
-                      {session.type === "Live Zoom" ? "🔴" : "🎙"} {session.type}
-                    </span>
-                    {session.free && (
-                      <span
-                        style={{
-                          fontFamily: "system-ui, sans-serif",
-                          fontSize: 11,
-                          fontWeight: 700,
-                          background: "#f0f8f0",
-                          color: "#4a7c59",
-                          padding: "3px 10px",
-                          borderRadius: 4,
-                          border: "1px solid #d0e8d0",
-                        }}
-                      >
-                        Free & Open
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "system-ui, sans-serif",
-                      fontSize: 12,
-                      color: "#9898b8",
-                    }}
-                  >
-                    {session.seats}
-                  </div>
+      <div style={{ marginBottom: 56 }}>
+        {upcoming.map((s, i) => (
+          <div key={i} className="card-link" style={{
+            display: "grid", gap: "0 32px", padding: "28px 0",
+            borderLeft: s.type === "Live Zoom" ? "4px solid #6b1a1a" : "4px solid #999",
+            paddingLeft: 24,
+          }} role="article">
+            <div style={{ display: "flex", gap: 28, alignItems: "flex-start", flexWrap: "wrap" }}>
+              {/* Date block */}
+              <div className="date-block" style={{ minHeight: 58 }}>
+                <span className="day">{s.day}</span>
+                <span className="month">{s.month}</span>
+              </div>
+
+              {/* Content */}
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+                  <span style={{
+                    fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: 700,
+                    letterSpacing: "0.1em", textTransform: "uppercase",
+                    color: s.type === "Live Zoom" ? "#6b1a1a" : "#555",
+                    border: `1px solid ${s.type === "Live Zoom" ? "#6b1a1a" : "#999"}`,
+                    padding: "2px 10px",
+                  }}>{s.type}</span>
+                  {s.free && (
+                    <span style={{
+                      fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: 700,
+                      letterSpacing: "0.1em", textTransform: "uppercase",
+                      color: "#4a6a2a", border: "1px solid #4a6a2a", padding: "2px 10px",
+                    }}>Free &amp; Open</span>
+                  )}
                 </div>
 
-                <h3
-                  style={{
-                    fontFamily: "Georgia, serif",
-                    fontSize: 20,
-                    fontWeight: 700,
-                    color: "#1a1a2e",
-                    lineHeight: 1.25,
-                    marginBottom: 10,
-                  }}
-                >
-                  {session.title}
-                </h3>
+                <h3 style={{
+                  fontFamily: "'Times New Roman', serif",
+                  fontSize: 20, fontWeight: "normal", color: "#1a1a1a", lineHeight: 1.3, marginBottom: 8,
+                }}>{s.title}</h3>
 
-                <p
-                  style={{
-                    fontFamily: "system-ui, sans-serif",
-                    fontSize: 13,
-                    color: "#606080",
-                    lineHeight: 1.65,
-                    marginBottom: 18,
-                  }}
-                >
-                  {session.description}
-                </p>
+                <div style={{
+                  display: "flex", gap: 24, flexWrap: "wrap",
+                  fontFamily: "Arial, sans-serif", fontSize: 13, color: "#666",
+                  marginBottom: 16,
+                }}>
+                  <span>{s.time}</span>
+                  <span>{s.duration}</span>
+                  <span style={{ color: "#6b1a1a" }}>{s.seats}</span>
+                </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: 12,
-                    paddingTop: 16,
-                    borderTop: "1px solid #f0ece0",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "system-ui, sans-serif",
-                      fontSize: 13,
-                      color: "#3d3d5c",
-                      display: "flex",
-                      gap: 20,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span>📅 {session.date}</span>
-                    <span>🕖 {session.time}</span>
-                    <span>⏱ {session.duration}</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    {session.courseSlug && (
-                      <Link
-                        href={`/courses/${session.courseSlug}`}
-                        style={{
-                          fontFamily: "system-ui, sans-serif",
-                          fontSize: 12,
-                          color: "#c9a84c",
-                          textDecoration: "none",
-                          padding: "7px 16px",
-                          border: "1px solid #c9a84c",
-                          borderRadius: 6,
-                        }}
-                      >
-                        View Course
-                      </Link>
-                    )}
-                    <Link
-                      href="/contact"
-                      style={{
-                        fontFamily: "system-ui, sans-serif",
-                        fontSize: 13,
-                        fontWeight: 700,
-                        background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
-                        color: "#e8cc7a",
-                        textDecoration: "none",
-                        padding: "8px 18px",
-                        borderRadius: 6,
-                      }}
-                    >
-                      {session.free ? "Join Free →" : "Register →"}
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  {s.slug && (
+                    <Link href={`/courses/${s.slug}`} className="btn-outline" style={{ fontSize: 11 }}>
+                      View Course
                     </Link>
-                  </div>
+                  )}
+                  <Link href="/contact" className="btn-primary" style={{ fontSize: 11 }}>
+                    {s.free ? "Join Free" : "Register →"}
+                  </Link>
                 </div>
               </div>
             </div>
@@ -373,157 +134,50 @@ export default function WebinarsPage() {
       </div>
 
       {/* Past recordings */}
-      <div
-        style={{
-          background: "#fff",
-          border: "1px solid #e8e4d8",
-          borderRadius: 14,
-          padding: "28px 32px",
-          marginBottom: 48,
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 20,
-            fontWeight: 700,
-            color: "#1a1a2e",
-            marginBottom: 6,
-          }}
-        >
-          Past Session Recordings
-        </h2>
-        <p
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 13,
-            color: "#9898b8",
-            marginBottom: 22,
-          }}
-        >
-          Enrolled students can access all recordings from the dashboard.
-        </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {pastRecordings.map((rec, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "14px 0",
-                borderBottom: i < pastRecordings.length - 1 ? "1px solid #f0ece0" : "none",
-                gap: 12,
-                flexWrap: "wrap",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontFamily: "system-ui, sans-serif",
-                    fontSize: 14,
-                    color: "#1a1a2e",
-                    fontWeight: 500,
-                    marginBottom: 3,
-                  }}
-                >
-                  {rec.title}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "system-ui, sans-serif",
-                    fontSize: 11,
-                    color: "#9898b8",
-                  }}
-                >
-                  {rec.type} · {rec.date} · {rec.duration}
-                </div>
-              </div>
-              <Link
-                href="/dashboard"
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 12,
-                  color: "#c9a84c",
-                  textDecoration: "none",
-                  fontWeight: 600,
-                  border: "1px solid #c9a84c",
-                  padding: "5px 14px",
-                  borderRadius: 4,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Watch Recording →
-              </Link>
-            </div>
-          ))}
+      <div style={{ marginBottom: 56 }}>
+        <div style={{ borderBottom: "2px solid #1a1a1a", paddingBottom: 10, marginBottom: 0 }}>
+          <span className="uppercase-label" style={{ color: "#1a1a1a" }}>Past Session Recordings</span>
         </div>
+        <div style={{ marginBottom: 12, fontFamily: "Arial, sans-serif", fontSize: 13, color: "#999", padding: "12px 0" }}>
+          Enrolled students can access all recordings from the dashboard.
+        </div>
+        {pastRecordings.map((r, i) => (
+          <div key={i} className="card-link" style={{
+            display: "flex", justifyContent: "space-between",
+            alignItems: "center", padding: "16px 0", flexWrap: "wrap", gap: 12,
+          }}>
+            <div>
+              <div style={{ fontFamily: "'Times New Roman', serif", fontSize: 16, color: "#1a1a1a", marginBottom: 3 }}>
+                {r.title}
+              </div>
+              <div style={{ fontFamily: "Arial, sans-serif", fontSize: 12, color: "#999" }}>
+                {r.type} · {r.date} · {r.dur}
+              </div>
+            </div>
+            <Link href="/dashboard" style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+              textTransform: "uppercase", color: "#6b1a1a", textDecoration: "none",
+              border: "1px solid #6b1a1a", padding: "5px 14px",
+              fontFamily: "Arial, sans-serif",
+            }}>Watch Recording →</Link>
+          </div>
+        ))}
       </div>
 
-      {/* Never miss a session CTA */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #1a1a2e, #2d2d4e)",
-          borderRadius: 14,
-          padding: "36px 44px",
-          textAlign: "center",
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 24,
-            fontWeight: 700,
-            color: "#faf8f2",
-            marginBottom: 10,
-          }}
-        >
-          Never miss a live session.
-        </h2>
-        <p
-          style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 14,
-            color: "#9898b8",
-            marginBottom: 24,
-            maxWidth: 440,
-            margin: "0 auto 24px",
-            lineHeight: 1.7,
-          }}
-        >
-          Enrol in a course to receive session reminders, Zoom links, and access to all recordings.
-        </p>
-        <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link
-            href="/courses"
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              background: "linear-gradient(135deg, #c9a84c, #e8cc7a)",
-              color: "#1a1a2e",
-              padding: "12px 26px",
-              borderRadius: 6,
-              textDecoration: "none",
-            }}
-          >
-            Browse Courses
-          </Link>
-          <Link
-            href="/contact"
-            style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 14,
-              color: "#c8c8e0",
-              border: "1px solid #4a4a6a",
-              padding: "11px 22px",
-              borderRadius: 6,
-              textDecoration: "none",
-            }}
-          >
-            Send a Question
-          </Link>
+      {/* Never miss CTA */}
+      <div style={{
+        background: "#f7f6f4", border: "1px solid #d0cdc8",
+        padding: "36px 40px", marginBottom: 60,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        flexWrap: "wrap", gap: 20,
+      }}>
+        <div>
+          <div className="uppercase-label" style={{ color: "#6b1a1a", marginBottom: 8 }}>Never Miss a Session</div>
+          <p style={{ fontFamily: "Arial, sans-serif", fontSize: 14, color: "#555" }}>
+            Enrol in a course to receive session reminders, Zoom links, and access to all recordings.
+          </p>
         </div>
+        <Link href="/courses" className="btn-primary">Browse Courses</Link>
       </div>
     </div>
   );
